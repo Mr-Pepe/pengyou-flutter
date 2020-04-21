@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pengyou/models/entry.dart';
 
 class EntryList extends StatefulWidget {
-  List<String> entryList;
+  List<Entry> entryList;
 
   EntryList({this.entryList});
 
@@ -18,7 +19,7 @@ class EntryListState extends State<EntryList> {
       itemCount: widget.entryList.length,
       itemBuilder: (BuildContext context, int index) {
         return ListTile(
-          title: Text(widget.entryList[index]),
+          title: Text(widget.entryList[index].simplified),
         );
       },
       separatorBuilder: (BuildContext context, int index) => const Divider(),

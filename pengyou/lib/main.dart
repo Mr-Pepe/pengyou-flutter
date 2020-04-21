@@ -5,6 +5,7 @@ import 'package:pengyou/views/homeView.dart';
 void main() => runApp(PengyouApp());
 
 class PengyouApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,4 +17,5 @@ class PengyouApp extends StatelessWidget {
     );
   }
 }
+
 

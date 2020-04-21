@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pengyou/values/strings.dart';
+import 'package:pengyou/models/entry.dart';
+import 'package:pengyou/views/dictionary/appDatabase.dart';
 import 'package:pengyou/views/reusable/entryList.dart';
+
 
 class DictionarySearchView extends StatefulWidget {
   @override
@@ -11,7 +13,7 @@ class DictionarySearchView extends StatefulWidget {
 class DictionarySearchViewState extends State<DictionarySearchView> {
   TextEditingController _searchQueryController = TextEditingController();
   String searchQuery = "Search query";
-  List<String> searchQueries = <String>[''];
+  List<Entry> searchResults = <Entry>[];
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +26,21 @@ class DictionarySearchViewState extends State<DictionarySearchView> {
           ),
         ),
         body: EntryList(
-          entryList: searchQueries,
+          entryList: searchResults,
         ));
   }
 
-  void search(String query) {
-    setState(() {
-      searchQueries.add(query);
-    });
+  void search(String query) async {
+    DBProvider db = DBProvider.db;
+
+    int id = int.parse(query);
+
+    Entry entry = await db.queryEntryById(id);
+
+    if (entry != null) {
+        setState(() {
+          searchResults.add(entry);
+        });
+    }
   }
 }
