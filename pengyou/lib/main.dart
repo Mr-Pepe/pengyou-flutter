@@ -12,7 +12,7 @@ class PengyouApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue, // TODO: Set Theme here
       ),
-      home: HomeView(title: AppStrings.applicationName),
+      home: HomeView(),
     );
   }
 }

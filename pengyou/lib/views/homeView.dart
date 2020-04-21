@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pengyou/icons/custom_icons_icons.dart';
 import 'package:pengyou/values/strings.dart';
+import 'package:pengyou/views/dictionary/search/dictionarySearchView.dart';
 
 class HomeView extends StatefulWidget {
-  final String title;
-
-  HomeView({this.title});
-
   @override
   HomeViewState createState() => HomeViewState();
 }
@@ -15,12 +12,16 @@ class HomeView extends StatefulWidget {
 class HomeViewState extends State<HomeView> {
   int _selectedIndex = 0;
 
+  static List<Widget> _mainViews = <Widget>[
+    DictionarySearchView(),
+    Text(
+      'Settings Placeholder',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -35,6 +36,7 @@ class HomeViewState extends State<HomeView> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
+      body: _mainViews[_selectedIndex],
     );
   }
 
