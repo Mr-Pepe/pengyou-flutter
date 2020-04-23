@@ -1,46 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pengyou/models/entry.dart';
-import 'package:pengyou/views/dictionary/appDatabase.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pengyou/views/dictionary/search/bloc/DictionarySearchEvent.dart';
+import 'package:pengyou/views/dictionary/search/bloc/DictionarySearchState.dart';
+import 'package:pengyou/views/dictionary/search/bloc/dictionarySearchBloc.dart';
 import 'package:pengyou/views/reusable/entryList.dart';
-
 
 class DictionarySearchView extends StatefulWidget {
   @override
-  DictionarySearchViewState createState() => DictionarySearchViewState();
+  State<DictionarySearchView> createState() => _DictionarySearchViewState();
 }
 
-class DictionarySearchViewState extends State<DictionarySearchView> {
+class _DictionarySearchViewState extends State<DictionarySearchView> {
+  DictionarySearchBloc _bloc;
+
   TextEditingController _searchQueryController = TextEditingController();
-  String searchQuery = "Search query";
-  List<Entry> searchResults = <Entry>[];
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc = BlocProvider.of<DictionarySearchBloc>(context);
+    _searchQueryController.addListener(_onQueryChanged);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: TextField(
-            controller: _searchQueryController,
-            autofocus: true,
-            onChanged: search,
+    return BlocBuilder<DictionarySearchBloc, DictionarySearchState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: TextField(
+              controller: _searchQueryController,
+              autofocus: true,
+            ),
           ),
-        ),
-        body: EntryList(
-          entryList: searchResults,
-        ));
+          body: EntryList(
+            entryList: state.chineseSearchResults,
+          ),
+        );
+      },
+    );
   }
 
-  void search(String query) async {
-    DBProvider db = DBProvider.db;
-
-    int id = int.parse(query);
-
-    Entry entry = await db.queryEntryById(id);
-
-    if (entry != null) {
-        setState(() {
-          searchResults.add(entry);
-        });
-    }
+  void _onQueryChanged() {
+    _bloc.add(SearchQueryChanged(query: _searchQueryController.text));
   }
 }
