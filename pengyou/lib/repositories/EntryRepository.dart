@@ -1,24 +1,13 @@
 import 'package:pengyou/models/entry.dart';
-import 'package:pengyou/views/dictionary/appDatabase.dart';
+import 'package:pengyou/repositories/appDatabase.dart';
 
 class EntryRepository {
-  
-  final chineseResults = <String>[];
 
   Future<List<Entry>> searchForChinese(String query) async {
     
     DBProvider db = DBProvider.db;
 
-    int id = int.parse(query);
-
-    Entry entry = await db.queryEntryById(id);
-
-    if (entry == null) {
-      return <Entry>[];
-    }
-    else {
-      return [entry];
-    }
+    return await db.searchInDictByChinese(query, query +'z');
   }
 
   Future<Entry> searchForEnglish(String query) async {
