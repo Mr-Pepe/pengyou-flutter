@@ -14,6 +14,6 @@ class EntryRepository {
   Future<Entry> searchForEnglish(String query) async {}
 
   String cleanChineseSearchQuery(String query) {
-    return query.replaceAll('ü', 'u:').replaceAll('v', 'u:').replaceAll(' ', '').toLowerCase();
+    return query.toLowerCase().replaceAll('ü', 'u:').replaceAll('v', 'u:').replaceAll(' ', '');
   }
 }

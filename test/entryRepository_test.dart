@@ -27,5 +27,9 @@ void main() {
     test('Convert to lower case', () {
       expect(repository.cleanChineseSearchQuery("A你b我C"), "a你b我c");
     });
+
+    test('All at once', () {
+      expect(repository.cleanChineseSearchQuery(' Ü 你V 我 c '), "u:你u:我c");
+    });
   });
 }
