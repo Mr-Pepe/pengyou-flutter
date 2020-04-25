@@ -7,12 +7,13 @@ class EntryRepository {
   final DBProvider db;
 
   Future<List<Entry>> searchForChinese(String query) async {
-    return await db.searchInDictByChinese(query, query + 'z');
+    final cleanedQuery = cleanChineseSearchQuery(query);
+    return await db.searchInDictByChinese(cleanedQuery, cleanedQuery + 'z');
   }
 
   Future<Entry> searchForEnglish(String query) async {}
 
   String cleanChineseSearchQuery(String query) {
-    return "";
+    return query.replaceAll('ü', 'u:').replaceAll('v', 'u:').replaceAll(' ', '').toLowerCase();
   }
 }
