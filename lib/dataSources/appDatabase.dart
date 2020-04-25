@@ -31,6 +31,8 @@ final String tableTradToSimplPhrases = 'trad_to_simpl_phrases';
 // columnTraditional
 // columnSimplified
 
+const int MAX_SEARCH_RESULTS = 1001;
+
 class DBProvider {
   final String _databaseName = "data.db";
   final int _databaseVersion = 1;
@@ -81,15 +83,38 @@ class DBProvider {
     }
   }
 
-  Future<List<Entry>> searchInDictByChinese(
+  Future<List<Entry>> searchInDictBySimplifiedChinese(
       String lowerString, String upperString) async {
+    // This search makes use of the permutations
     Database db = await database;
 
     List<Map> maps = await db.query(
       tableEntries,
       where:
           '$columnId IN (SELECT DISTINCT $columnEntryId FROM $tablePermutations WHERE $columnPermutation >= ? AND $columnPermutation < ? LIMIT ?)',
-      whereArgs: [lowerString, upperString, 1001],
+      whereArgs: [lowerString, upperString, MAX_SEARCH_RESULTS],
+    );
+
+    if (maps.length > 0) {
+      return [
+        for (var iEntry = 0; iEntry < maps.length; iEntry++)
+          Entry.fromMap(maps[iEntry])
+      ];
+    } else {
+      return <Entry>[];
+    }
+  }
+
+  Future<List<Entry>> searchInDictByTraditionalChinese(
+      String lowerString, String upperString) async {
+    // This search only searches for matches on the traditional entries
+    Database db = await database;
+
+    List<Map> maps = await db.query(
+      tableEntries,
+      where: '$columnTraditional >= ? AND $columnTraditional < ?',
+      whereArgs: [lowerString, upperString],
+      limit: MAX_SEARCH_RESULTS,
     );
 
     if (maps.length > 0) {
@@ -105,8 +130,12 @@ class DBProvider {
   Future<String> getTraditionalToSimplifiedCharacters(String query) async {
     Database db = await database;
 
-    List<Map> maps = await db.query(tableTradToSimplCharacters,
-        columns: [columnSimplified], where: 'traditional = $query');
+    List<Map> maps = await db.query(
+      tableTradToSimplCharacters,
+      columns: [columnSimplified],
+      where: 'traditional = ?',
+      whereArgs: [query],
+    );
 
     if (maps.length > 0) {
       return maps[0][columnSimplified];
@@ -118,8 +147,12 @@ class DBProvider {
   Future<String> getTraditionalToSimplifiedPhrases(String query) async {
     Database db = await database;
 
-    List<Map> maps = await db.query(tableTradToSimplPhrases,
-        columns: [columnSimplified], where: 'traditional = $query');
+    List<Map> maps = await db.query(
+      tableTradToSimplPhrases,
+      columns: [columnSimplified],
+      where: '$columnTraditional = ?',
+      whereArgs: [query],
+    );
 
     if (maps.length > 0) {
       return maps[0][columnSimplified];

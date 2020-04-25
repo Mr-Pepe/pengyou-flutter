@@ -7,15 +7,31 @@ class EntryRepository {
 
   final DBProvider db;
 
-  Future<List<Entry>> searchForChinese(String query) async {
-    final cleanedQuery = cleanChineseSearchQuery(query);
+  Future<List<Entry>> searchForChinese(String rawQuery) async {
+    // TODO: Turn this into a stream so it returns available results early
+    final cleanedQuery = cleanChineseSearchQuery(rawQuery);
 
     // Characters and detected phrases in the query are converted to simplified Chinese
     // The actual search is then only performed in simplified Chinese
     // Otherwise the permutations for the search index explode
-    final queries = getSimplifiedQueries(cleanedQuery);
+    final List<String> queries = await getSimplifiedQueries(cleanedQuery);
 
-    return await db.searchInDictByChinese(cleanedQuery, cleanedQuery + 'z');
+    List<Entry> results = <Entry>[];
+
+    for (var iQuery = 0; iQuery < queries.length; iQuery++) {
+      final query = queries[iQuery];
+      results
+          .addAll(await db.searchInDictBySimplifiedChinese(query, query + 'z'));
+    }
+
+    // If nothing found so far, search for exact matches in traditional Chinese
+    // That can happen when a character is not in openCC (Example: 廐, as of data_v0.4)
+    if (results.isEmpty) {
+      results.addAll(await db.searchInDictByTraditionalChinese(
+          cleanedQuery, cleanedQuery + 'z'));
+    }
+
+    return results;
   }
 
   Future<Entry> searchForEnglish(String query) async {}
@@ -30,28 +46,36 @@ class EntryRepository {
 
   Future<List<String>> getSimplifiedQueries(String originalQuery) async {
     // Check if the input matches a phrase that can be converted to simplified
-    List<String> queries = await _getTraditionalToSimplifiedPhrases(originalQuery);
-
+    List<String> queries =
+        (await db.getTraditionalToSimplifiedPhrases(originalQuery)).split(' ');
 
     // If there was no match with a phrase check if characters in the query can be converted to simplified characters
-    if (queries.length == 1 && queries[0] == originalQuery) {
+    if (queries.length == 1 && queries[0] == '') {
       queries = await _getTraditionalToSimpliedCharacters(originalQuery);
     }
 
     return queries;
   }
 
-  Future<List<String>> _getTraditionalToSimpliedCharacters(String originalQuery) async {
+  Future<List<String>> _getTraditionalToSimpliedCharacters(
+      String originalQuery) async {
     List<String> queries = [''];
 
-    for (var iCharacter = 0; iCharacter < originalQuery.characters.length; iCharacter++) {
-      final character = originalQuery.characters.skip(iCharacter).take(1).toString();
+    // Iterate over the query and check whether characters can be converted to simplified Chinese
+    for (var iCharacter = 0;
+        iCharacter < originalQuery.characters.length;
+        iCharacter++) {
+      // Use the characters package to handle surrogate pairs
+      final character =
+          originalQuery.characters.skip(iCharacter).take(1).toString();
 
-      final conversions = (await db.getTraditionalToSimplifiedCharacters(character)).split(',');
+      final conversions =
+          (await db.getTraditionalToSimplifiedCharacters(character)).split(',');
 
       if (conversions.length > 0 && conversions[0] != '') {
         final tmpQueries = <String>[];
 
+        // If there is more than one possible conversion generate new query variants
         for (var i = 0; i < conversions.length; i++) {
           queries.forEach((query) {
             tmpQueries.add(query + conversions[i]);
@@ -59,22 +83,12 @@ class EntryRepository {
         }
 
         queries = tmpQueries;
-      }
-      else {
+      } else {
+        // If there is no possible conversion just add the character
         for (var i = 0; i < queries.length; i++) {
           queries[i] = queries[i] + character;
         }
       }
-    }
-    
-    return queries;
-  }
-
-  Future<List<String>> _getTraditionalToSimplifiedPhrases(String originalQuery) async {
-    List<String> queries = (await db.getTraditionalToSimplifiedPhrases(originalQuery)).split(' ');
-
-    if (queries.length == 1 && queries[0] == '') {
-      queries = [originalQuery];
     }
 
     return queries;
