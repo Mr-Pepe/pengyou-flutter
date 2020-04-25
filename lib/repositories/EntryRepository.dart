@@ -11,4 +11,8 @@ class EntryRepository {
   }
 
   Future<Entry> searchForEnglish(String query) async {}
+
+  String cleanChineseSearchQuery(String query) {
+    return "";
+  }
 }
