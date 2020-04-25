@@ -1,4 +1,4 @@
-import 'package:pengyou/views/dictionary/appDatabase.dart';
+import 'package:pengyou/dataSources/appDatabase.dart';
 
 class Entry {
   int id;

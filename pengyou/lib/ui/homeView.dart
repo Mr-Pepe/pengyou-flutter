@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pengyou/icons/custom_icons_icons.dart';
+import 'package:pengyou/drawables/custom_icons_icons.dart';
+import 'package:pengyou/ui/dictionary/search/dictionarySearchView.dart';
 import 'package:pengyou/values/strings.dart';
-import 'package:pengyou/views/dictionary/search/bloc/dictionarySearchBloc.dart';
-import 'package:pengyou/views/dictionary/search/dictionarySearchView.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -15,10 +13,7 @@ class HomeViewState extends State<HomeView> {
   int _selectedIndex = 0;
 
   static List<Widget> _mainViews = <Widget>[
-    BlocProvider(
-      create: (context) => DictionarySearchBloc(),
-      child: DictionarySearchView(),
-    ),
+    DictionarySearchView(),
     Text(
       'Settings Placeholder',
     ),
