@@ -21,6 +21,16 @@ final String tablePermutations = 'permutations';
 final String columnPermutation = 'permutation';
 final String columnEntryId = 'entry_id';
 
+final String tableTradToSimplCharacters = 'trad_to_simpl_characters';
+// columnId
+// columnTraditional
+// columnSimplified
+
+final String tableTradToSimplPhrases = 'trad_to_simpl_phrases';
+// columnId
+// columnTraditional
+// columnSimplified
+
 class DBProvider {
   final String _databaseName = "data.db";
   final int _databaseVersion = 1;
@@ -89,6 +99,32 @@ class DBProvider {
       ];
     } else {
       return <Entry>[];
+    }
+  }
+
+  Future<String> getTraditionalToSimplifiedCharacters(String query) async {
+    Database db = await database;
+
+    List<Map> maps = await db.query(tableTradToSimplCharacters,
+        columns: [columnSimplified], where: 'traditional = $query');
+
+    if (maps.length > 0) {
+      return maps[0][columnSimplified];
+    } else {
+      return '';
+    }
+  }
+
+  Future<String> getTraditionalToSimplifiedPhrases(String query) async {
+    Database db = await database;
+
+    List<Map> maps = await db.query(tableTradToSimplPhrases,
+        columns: [columnSimplified], where: 'traditional = $query');
+
+    if (maps.length > 0) {
+      return maps[0][columnSimplified];
+    } else {
+      return '';
     }
   }
 }
