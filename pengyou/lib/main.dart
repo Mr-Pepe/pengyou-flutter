@@ -3,7 +3,6 @@ import 'package:pengyou/dataSources/appDatabase.dart';
 import 'package:pengyou/repositories/EntryRepository.dart';
 import 'package:pengyou/ui/homeView.dart';
 import 'package:pengyou/values/strings.dart';
-import 'package:pengyou/viewModels/dictionarySearchViewModel.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(PengyouApp());
@@ -23,10 +22,7 @@ class PengyouApp extends StatelessWidget {
           update: (context, dbProvider, entryRepository) =>
               EntryRepository(db: dbProvider),
         ),
-        ProxyProvider<EntryRepository, DictionarySearchViewModel>(
-          update: (context, entryRepository, dictionarySearchViewModel) =>
-              DictionarySearchViewModel(entryRepository),
-        ),
+        
       ],
       child: MaterialApp(
         title: AppStrings.applicationName,

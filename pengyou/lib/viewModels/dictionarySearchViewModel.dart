@@ -7,10 +7,11 @@ class DictionarySearchViewModel extends ChangeNotifier {
 
   final EntryRepository _entryRepository;
 
-  List<Entry> chineseSearchResults = <Entry>[];
+  List<Entry> _chineseSearchResults = <Entry>[];
+  List<Entry> get chineseSearchResults => _chineseSearchResults;
 
   void search(String query) async {
-    chineseSearchResults = await _entryRepository.searchForChinese(query);
+    _chineseSearchResults = await _entryRepository.searchForChinese(query);
     notifyListeners();
   }
 }
