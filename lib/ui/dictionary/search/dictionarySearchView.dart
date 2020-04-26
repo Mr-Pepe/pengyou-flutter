@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pengyou/ui/reusable/entryList.dart';
+import 'package:pengyou/values/theme.dart';
 import 'package:pengyou/viewModels/dictionarySearchViewModel.dart';
 import 'package:provider/provider.dart';
 
@@ -10,8 +11,11 @@ class DictionarySearchView extends StatefulWidget {
 }
 
 class _DictionarySearchViewState extends State<DictionarySearchView> {
+
   @override
   Widget build(BuildContext context) {
+    ThemeData themeData = Provider.of<AppTheme>(context).themeData;
+
     return ChangeNotifierProvider<DictionarySearchViewModel>.value(
       value: DictionarySearchViewModel(Provider.of(context)),
       child: Consumer<DictionarySearchViewModel>(
@@ -20,6 +24,7 @@ class _DictionarySearchViewState extends State<DictionarySearchView> {
             title: TextField(
               onChanged: model.search,
               autofocus: true,
+              cursorColor: themeData.colorScheme.onPrimary,
             ),
           ),
           body: EntryList(
