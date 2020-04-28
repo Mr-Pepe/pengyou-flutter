@@ -38,7 +38,7 @@ android {
 
     defaultConfig {
         // TODO: Change application id
-        applicationId "com.mrpepe.pengyou-flutter"
+        applicationId "com.mrpepe.pengyouflutter"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()

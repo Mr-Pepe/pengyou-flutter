@@ -25,15 +25,11 @@ class PengyouApp extends StatelessWidget {
           update: (context, dbProvider, entryRepository) =>
               EntryRepository(db: dbProvider),
         ),
-
-        // Provide the theme
-        Provider<AppTheme>(
-          create: (_) => appTheme,
-        ),
       ],
       child: MaterialApp(
         title: AppStrings.applicationName,
-        theme: appTheme.themeData,
+        theme: AppTheme(isDark: false).themeData,
+        darkTheme: AppTheme(isDark: true).themeData,
         home: HomeView(),
       ),
     );

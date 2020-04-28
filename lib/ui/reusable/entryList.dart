@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pengyou/models/entry.dart';
+import 'package:pengyou/ui/reusable/entryCard.dart';
+import 'package:pengyou/values/dimensions.dart';
 
 class EntryList extends StatefulWidget {
-  List<Entry> entryList;
+  final List<Entry> entryList;
 
   EntryList({this.entryList});
 
@@ -14,15 +16,19 @@ class EntryList extends StatefulWidget {
 class EntryListState extends State<EntryList> {
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      padding: EdgeInsets.all(0),
-      itemCount: widget.entryList.length,
-      itemBuilder: (BuildContext context, int index) {
-        return ListTile(
-          title: Text(widget.entryList[index].simplified),
-        );
-      },
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
+    // final theme = Theme.of(context);
+
+    return Padding(
+      padding: EdgeInsets.fromLTRB(0, mediumPadding, 0, 0),
+      child: ListView.separated(
+        itemCount: widget.entryList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return EntryCard(widget.entryList[index]);
+        },
+        separatorBuilder: (BuildContext context, int index) => const Divider(
+          color: Colors.grey,
+        ),
+      ),
     );
   }
 }

@@ -11,27 +11,31 @@ class DictionarySearchView extends StatefulWidget {
 }
 
 class _DictionarySearchViewState extends State<DictionarySearchView> {
-
   @override
   Widget build(BuildContext context) {
-    ThemeData themeData = Provider.of<AppTheme>(context).themeData;
+    
+    final theme = Theme.of(context);
 
     return ChangeNotifierProvider<DictionarySearchViewModel>.value(
       value: DictionarySearchViewModel(Provider.of(context)),
-      child: Consumer<DictionarySearchViewModel>(
-        builder: (context, model, child) => Scaffold(
+      child:
+          Consumer<DictionarySearchViewModel>(builder: (context, model, child) {
+
+        model.search('ni');
+
+        return Scaffold(
           appBar: AppBar(
             title: TextField(
               onChanged: model.search,
               autofocus: true,
-              cursorColor: themeData.colorScheme.onPrimary,
+              cursorColor: theme.colorScheme.onPrimary,
             ),
           ),
           body: EntryList(
             entryList: model.chineseSearchResults,
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }
