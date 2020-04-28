@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pengyou/models/entry.dart';
+import 'package:pengyou/utils/enumsAndConstants.dart';
+import 'package:pengyou/utils/formatting.dart';
 import 'package:pengyou/values/dimensions.dart';
 
 class EntryCard extends StatelessWidget {
@@ -29,7 +31,7 @@ class EntryCard extends StatelessWidget {
                       textAlign: TextAlign.start,
                       textScaleFactor: 1.5,
                     ),
-                    Text(entry.pinyin),
+                    Text(formatIntonation(entry.pinyin, IntonationMode.pinyinMarks)),
                   ],
                 ),
               ),
