@@ -2,22 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:pengyou/dataSources/appDatabase.dart';
 import 'package:pengyou/repositories/EntryRepository.dart';
 import 'package:pengyou/ui/homeView.dart';
+import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/values/strings.dart';
 import 'package:pengyou/values/theme.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(PengyouApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final preferences = AppPreferences();
+
+  await preferences.init();
+
+  runApp(PengyouApp(preferences));
+}
 
 class PengyouApp extends StatelessWidget {
+  PengyouApp(this.preferences);
+
+  final AppPreferences preferences;
+
   @override
   Widget build(BuildContext context) {
-    AppTheme appTheme = AppTheme(isDark: false);
-
     return MultiProvider(
       providers: [
         // Independent services that do not rely on any other service
         Provider<DBProvider>(
           create: (_) => DBProvider.db,
+        ),
+
+        ChangeNotifierProvider<AppPreferences>(
+          create: (_) => preferences,
         ),
 
         // Dependent services that rely on other services

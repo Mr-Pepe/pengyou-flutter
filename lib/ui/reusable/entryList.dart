@@ -6,8 +6,9 @@ import 'package:pengyou/values/dimensions.dart';
 
 class EntryList extends StatefulWidget {
   final List<Entry> entryList;
+  final int intonationMode;
 
-  EntryList({this.entryList});
+  EntryList({this.entryList, this.intonationMode});
 
   @override
   EntryListState createState() => EntryListState();
@@ -23,7 +24,7 @@ class EntryListState extends State<EntryList> {
       child: ListView.separated(
         itemCount: widget.entryList.length,
         itemBuilder: (BuildContext context, int index) {
-          return EntryCard(widget.entryList[index]);
+          return EntryCard(widget.entryList[index], widget.intonationMode);
         },
         separatorBuilder: (BuildContext context, int index) => const Divider(
           color: Colors.grey,
