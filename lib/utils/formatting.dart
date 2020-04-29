@@ -51,6 +51,9 @@ String formatIntonation(String rawPinyin, IntonationMode mode) {
       }
       formattedPinyin = syllables.join();
       break;
+    case IntonationMode.pinyinNumbers:
+      formattedPinyin = formattedPinyin.replaceAll(' , ', ',');
+      break;
     default:
       {}
   }
