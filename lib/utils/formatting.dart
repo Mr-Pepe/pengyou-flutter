@@ -8,7 +8,7 @@ void formatDefinitions() {}
 ///
 /// `rawPinyin` is a string of space separated pinyin syllables with trailing tone numbers.
 /// The rules for placing tone marks were taken from https://en.wikipedia.org/wiki/Pinyin#Rules_for_placing_the_tone_mark.
-String formatIntonation(String rawPinyin, IntonationMode mode) {
+String formatIntonation(String rawPinyin, int mode) {
   String formattedPinyin = rawPinyin.replaceAll('u:', 'ü');
   switch (mode) {
     case IntonationMode.pinyinMarks:
