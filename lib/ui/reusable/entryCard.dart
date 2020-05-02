@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pengyou/models/entry.dart';
+import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/utils/formatting.dart';
 import 'package:pengyou/values/dimensions.dart';
+import 'package:provider/provider.dart';
 
 class EntryCard extends StatelessWidget {
   final Entry entry;
@@ -26,8 +28,8 @@ class EntryCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      entry.simplified,
+                    RichText(
+                      text: colorHeadword(entry.simplified, entry.pinyin, Provider.of<AppPreferences>(context), Theme.of(context)),
                       textAlign: TextAlign.start,
                       textScaleFactor: 1.5,
                     ),

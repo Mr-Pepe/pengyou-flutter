@@ -1,6 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:pengyou/models/entry.dart';
+import 'package:flutter/widgets.dart';
+import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/utils/enumsAndConstants.dart';
+import 'package:characters/characters.dart';
 
 void formatDefinitions() {}
 
@@ -92,5 +95,34 @@ bool isInt(String s) {
   } catch (e) {
     return false;
   }
-  ;
+}
+
+TextSpan colorHeadword(
+    String headword, String pinyin, AppPreferences prefs, ThemeData themeData) {
+  final syllables = pinyin.split(' ');
+
+  TextSpan output = TextSpan(children: [], style: themeData.textTheme.body1);
+
+  if (syllables.length == headword.characters.length) {
+    for (var iCharacter = 0;
+        iCharacter < headword.characters.length;
+        iCharacter++) {
+      // Use the characters package to handle surrogate pairs
+      final character = headword.characters.skip(iCharacter).take(1).toString();
+
+      final pinyinSyllable = syllables[iCharacter];
+
+      if (isInt(pinyinSyllable[pinyinSyllable.length - 1]) &&
+          !isInt(character)) {
+        final tone = int.parse(pinyinSyllable[pinyinSyllable.length - 1]);
+        output.children.add(TextSpan(
+            text: character,
+            style: TextStyle(color: prefs.getToneColor(tone))));
+      }
+    }
+  } else {
+    output.children.add(TextSpan(text: headword));
+  }
+
+  return output;
 }

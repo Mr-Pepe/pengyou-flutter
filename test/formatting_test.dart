@@ -1,6 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/utils/enumsAndConstants.dart';
 import 'package:pengyou/utils/formatting.dart';
+import 'package:pengyou/values/colors.dart';
+
+class MockPrefs extends Mock implements AppPreferences {}
 
 void main() {
   group('Pinyin with tone marks formatting:', () {
@@ -30,7 +37,8 @@ void main() {
     });
 
     test('Space after comma', () {
-      expect(formatIntonation('la1 , mo2', IntonationMode.pinyinMarks), 'lā, mó');
+      expect(
+          formatIntonation('la1 , mo2', IntonationMode.pinyinMarks), 'lā, mó');
     });
   });
 
@@ -53,7 +61,101 @@ void main() {
     });
 
     test('Space after comma', () {
-      expect(formatIntonation('la1 , mo2', IntonationMode.pinyinNumbers), 'la1, mo2');
+      expect(formatIntonation('la1 , mo2', IntonationMode.pinyinNumbers),
+          'la1, mo2');
+    });
+  });
+
+  group('Headword coloring:', () {
+    final mockPrefs = MockPrefs();
+    ThemeData themeData = ThemeData();
+    when(mockPrefs.getToneColor(1)).thenReturn(tone1DefaultColor);
+    when(mockPrefs.getToneColor(2)).thenReturn(tone2DefaultColor);
+    when(mockPrefs.getToneColor(3)).thenReturn(tone3DefaultColor);
+    when(mockPrefs.getToneColor(4)).thenReturn(tone4DefaultColor);
+    when(mockPrefs.getToneColor(5)).thenReturn(tone5DefaultColor);
+
+    test('Single character coloring', () {
+      expect(
+        colorHeadword("你", "ni1", mockPrefs, themeData),
+        TextSpan(style: themeData.textTheme.body1, children: [
+          TextSpan(
+              text: '你',
+              style:
+                  TextStyle(color: tone1DefaultColor))
+        ]),
+      );
+      expect(
+        colorHeadword("你", "ni2", mockPrefs, themeData),
+        TextSpan(style: themeData.textTheme.body1, children: [
+          TextSpan(
+              text: '你',
+              style:
+                  TextStyle(color: tone2DefaultColor))
+        ]),
+      );
+      expect(
+        colorHeadword("你", "ni3", mockPrefs, themeData),
+        TextSpan(style: themeData.textTheme.body1, children: [
+          TextSpan(
+              text: '你',
+              style:
+                  TextStyle(color: tone3DefaultColor))
+        ]),
+      );
+      expect(
+        colorHeadword("你", "ni4", mockPrefs, themeData),
+        TextSpan(style: themeData.textTheme.body1, children: [
+          TextSpan(
+              text: '你',
+              style:
+                  TextStyle(color: tone4DefaultColor))
+        ]),
+      );
+      expect(
+        colorHeadword("你", "ni5", mockPrefs, themeData),
+        TextSpan(style: themeData.textTheme.body1, children: [
+          TextSpan(
+              text: '你',
+              style:
+                  TextStyle(color: tone5DefaultColor))
+        ]),
+      );
+    });
+
+    test('Whole word coloring', () {
+      expect(
+          colorHeadword(
+              "朋友妻不可欺", "peng2 you5 qi1 bu4 ke3 qi1", mockPrefs, themeData),
+          TextSpan(
+              style:
+                  themeData.textTheme.body1,
+              children: [
+                TextSpan(
+                  text: '朋',
+                  style: TextStyle(color: tone2DefaultColor),
+                ),
+                TextSpan(
+                  text: '友',
+                  style: TextStyle(color: tone5DefaultColor),
+                ),
+                TextSpan(
+                  text: '妻',
+                  style: TextStyle(color: tone1DefaultColor),
+                ),
+                TextSpan(
+                  text: '不',
+                  style: TextStyle(color: tone4DefaultColor),
+                ),
+                TextSpan(
+                  text: '可',
+                  style: TextStyle(color: tone3DefaultColor),
+                ),
+                TextSpan(
+                  text: '欺',
+                  style: TextStyle(color: tone1DefaultColor),
+                ),
+              ]));
     });
   });
 }
