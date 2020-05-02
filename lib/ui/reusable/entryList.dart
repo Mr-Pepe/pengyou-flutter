@@ -19,17 +19,15 @@ class EntryListState extends State<EntryList> {
   Widget build(BuildContext context) {
     // final theme = Theme.of(context);
 
-    return Padding(
-      padding: EdgeInsets.fromLTRB(0, mediumPadding, 0, 0),
-      child: ListView.separated(
+    return ListView.separated(
         itemCount: widget.entryList.length,
         itemBuilder: (BuildContext context, int index) {
           return EntryCard(widget.entryList[index], widget.intonationMode);
         },
         separatorBuilder: (BuildContext context, int index) => const Divider(
+          height: 0,
           color: Colors.grey,
         ),
-      ),
     );
   }
 }

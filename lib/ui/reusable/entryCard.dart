@@ -19,7 +19,7 @@ class EntryCard extends StatelessWidget {
       color: theme.backgroundColor,
       elevation: 0,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(mediumPadding, 0, mediumPadding, 0),
+        padding: EdgeInsets.fromLTRB(mediumPadding, smallPadding, mediumPadding, smallPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
