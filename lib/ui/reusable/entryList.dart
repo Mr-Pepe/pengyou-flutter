@@ -22,7 +22,7 @@ class EntryListState extends State<EntryList> {
     return ListView.separated(
         itemCount: widget.entryList.length,
         itemBuilder: (BuildContext context, int index) {
-          return EntryCard(widget.entryList[index], widget.intonationMode);
+          return EntryCard(entry: widget.entryList[index], intonationMode: widget.intonationMode);
         },
         separatorBuilder: (BuildContext context, int index) => const Divider(
           height: 0,

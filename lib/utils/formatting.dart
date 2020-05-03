@@ -101,7 +101,7 @@ TextSpan colorHeadword(
     String headword, String pinyin, AppPreferences prefs, ThemeData themeData) {
   final syllables = pinyin.split(' ');
 
-  TextSpan output = TextSpan(children: [], style: themeData.textTheme.body1);
+  TextSpan output = TextSpan(children: []);
 
   // It's not easy to color the headword if there is no clear correspondance
   // between pinyin and headword, so those cases are ignored and returned in

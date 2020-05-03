@@ -76,43 +76,23 @@ void main() {
     when(mockPrefs.getToneColor(5)).thenReturn(tone5DefaultColor);
 
     test('Single character coloring', () {
-      expect(
-        colorHeadword("你", "ni1", mockPrefs, themeData),
-        TextSpan(style: themeData.textTheme.body1, children: [
-          TextSpan(text: '你', style: TextStyle(color: tone1DefaultColor))
-        ]),
-      );
-      expect(
-        colorHeadword("你", "ni2", mockPrefs, themeData),
-        TextSpan(style: themeData.textTheme.body1, children: [
-          TextSpan(text: '你', style: TextStyle(color: tone2DefaultColor))
-        ]),
-      );
-      expect(
-        colorHeadword("你", "ni3", mockPrefs, themeData),
-        TextSpan(style: themeData.textTheme.body1, children: [
-          TextSpan(text: '你', style: TextStyle(color: tone3DefaultColor))
-        ]),
-      );
-      expect(
-        colorHeadword("你", "ni4", mockPrefs, themeData),
-        TextSpan(style: themeData.textTheme.body1, children: [
-          TextSpan(text: '你', style: TextStyle(color: tone4DefaultColor))
-        ]),
-      );
-      expect(
-        colorHeadword("你", "ni5", mockPrefs, themeData),
-        TextSpan(style: themeData.textTheme.body1, children: [
-          TextSpan(text: '你', style: TextStyle(color: tone5DefaultColor))
-        ]),
-      );
+      final resultTone1 = colorHeadword("你", "ni1", mockPrefs, themeData);
+      final resultTone2 = colorHeadword("你", "ni2", mockPrefs, themeData);
+      final resultTone3 = colorHeadword("你", "ni3", mockPrefs, themeData);
+      final resultTone4 = colorHeadword("你", "ni4", mockPrefs, themeData);
+      final resultTone5 = colorHeadword("你", "ni5", mockPrefs, themeData);
+      expect(resultTone1.children[0].style.color, tone1DefaultColor);
+      expect(resultTone2.children[0].style.color, tone2DefaultColor);
+      expect(resultTone3.children[0].style.color, tone3DefaultColor);
+      expect(resultTone4.children[0].style.color, tone4DefaultColor);
+      expect(resultTone5.children[0].style.color, tone5DefaultColor);
     });
 
     test('Whole word coloring', () {
       expect(
           colorHeadword(
               "朋友妻不可欺", "peng2 you5 qi1 bu4 ke3 qi1", mockPrefs, themeData),
-          TextSpan(style: themeData.textTheme.body1, children: [
+          TextSpan(children: [
             TextSpan(
               text: '朋',
               style: TextStyle(color: tone2DefaultColor),
@@ -141,7 +121,7 @@ void main() {
 
       expect(
           colorHeadword("3C", "san1 C", mockPrefs, themeData),
-          TextSpan(style: themeData.textTheme.body1, children: [
+          TextSpan(children: [
             TextSpan(
               text: '3',
             ),
@@ -152,7 +132,7 @@ void main() {
 
       expect(
           colorHeadword("三C", "san1 C", mockPrefs, themeData),
-          TextSpan(style: themeData.textTheme.body1, children: [
+          TextSpan(children: [
             TextSpan(
               text: '三',
               style: TextStyle(color: tone1DefaultColor),

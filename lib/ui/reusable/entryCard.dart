@@ -9,7 +9,7 @@ class EntryCard extends StatelessWidget {
   final Entry entry;
   final int intonationMode;
 
-  EntryCard(this.entry, this.intonationMode);
+  EntryCard({this.entry, this.intonationMode});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,8 @@ class EntryCard extends StatelessWidget {
       color: theme.backgroundColor,
       elevation: 0,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(mediumPadding, smallPadding, mediumPadding, smallPadding),
+        padding: EdgeInsets.fromLTRB(
+            mediumPadding, smallPadding, mediumPadding, smallPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -28,16 +29,25 @@ class EntryCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    RichText(
-                      text: colorHeadword(entry.simplified, entry.pinyin, Provider.of<AppPreferences>(context), Theme.of(context)),
+                    Text.rich(
+                      colorHeadword(
+                          entry.simplified,
+                          entry.pinyin,
+                          Provider.of<AppPreferences>(context),
+                          Theme.of(context)),
                       textAlign: TextAlign.start,
-                      textScaleFactor: 1.5,
+                      style: TextStyle(fontSize: entryCardHeadwordFontSize),
                     ),
-                    Text(formatIntonation(entry.pinyin, intonationMode)),
+                    Text(
+                      formatIntonation(entry.pinyin, intonationMode),
+                      style: TextStyle(fontSize: entryCardPinyinFontSize),
+                    ),
                   ],
                 ),
               ),
-              Text(entry.hsk.toString()),
+              Text.rich(TextSpan(
+                  text: 'HSK ' + entry.hsk.toString(),
+                  style: TextStyle(decoration: TextDecoration.underline))),
             ]),
             Text(
               entry.definitions,
