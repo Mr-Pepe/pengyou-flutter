@@ -12,7 +12,6 @@ import 'package:pengyou/values/colors.dart';
 class MockPrefs extends Mock implements AppPreferences {}
 
 void main() {
-
   final mockPrefs = MockPrefs();
   ThemeData themeData = ThemeData();
   when(mockPrefs.getToneColor(1)).thenReturn(tone1DefaultColor);
@@ -20,6 +19,7 @@ void main() {
   when(mockPrefs.getToneColor(3)).thenReturn(tone3DefaultColor);
   when(mockPrefs.getToneColor(4)).thenReturn(tone4DefaultColor);
   when(mockPrefs.getToneColor(5)).thenReturn(tone5DefaultColor);
+  when(mockPrefs.alternativeHeadwordScalingFactor).thenReturn(0.8);
 
   group('Pinyin with tone marks formatting:', () {
     // Test according to https://en.wikipedia.org/wiki/Pinyin#Rules_for_placing_the_tone_mark
@@ -79,11 +79,11 @@ void main() {
 
   group('Headword coloring:', () {
     test('Single character coloring', () {
-      final resultTone1 = colorHeadword("你", "ni1", mockPrefs, themeData);
-      final resultTone2 = colorHeadword("你", "ni2", mockPrefs, themeData);
-      final resultTone3 = colorHeadword("你", "ni3", mockPrefs, themeData);
-      final resultTone4 = colorHeadword("你", "ni4", mockPrefs, themeData);
-      final resultTone5 = colorHeadword("你", "ni5", mockPrefs, themeData);
+      final resultTone1 = colorHeadword("你", "ni1", mockPrefs);
+      final resultTone2 = colorHeadword("你", "ni2", mockPrefs);
+      final resultTone3 = colorHeadword("你", "ni3", mockPrefs);
+      final resultTone4 = colorHeadword("你", "ni4", mockPrefs);
+      final resultTone5 = colorHeadword("你", "ni5", mockPrefs);
       expect(resultTone1.children[0].style.color, tone1DefaultColor);
       expect(resultTone2.children[0].style.color, tone2DefaultColor);
       expect(resultTone3.children[0].style.color, tone3DefaultColor);
@@ -93,9 +93,9 @@ void main() {
 
     test('Whole word coloring', () {
       expect(
-          colorHeadword(
-              "朋友妻不可欺", "peng2 you5 qi1 bu4 ke3 qi1", mockPrefs, themeData),
-          TextSpan(children: [
+          colorHeadword("朋友妻不可欺", "peng2 you5 qi1 bu4 ke3 qi1", mockPrefs,
+              fontSize: 23),
+          TextSpan(style: TextStyle().copyWith(fontSize: 23), children: [
             TextSpan(
               text: '朋',
               style: TextStyle(color: tone2DefaultColor),
@@ -123,8 +123,8 @@ void main() {
           ]));
 
       expect(
-          colorHeadword("3C", "san1 C", mockPrefs, themeData),
-          TextSpan(children: [
+          colorHeadword("3C", "san1 C", mockPrefs, fontSize: 16),
+          TextSpan(style: TextStyle().copyWith(fontSize: 16), children: [
             TextSpan(
               text: '3',
             ),
@@ -134,8 +134,8 @@ void main() {
           ]));
 
       expect(
-          colorHeadword("三C", "san1 C", mockPrefs, themeData),
-          TextSpan(children: [
+          colorHeadword("三C", "san1 C", mockPrefs),
+          TextSpan(style: TextStyle().copyWith(fontSize: 14), children: [
             TextSpan(
               text: '三',
               style: TextStyle(color: tone1DefaultColor),
@@ -149,46 +149,76 @@ void main() {
 
   group('Headword formatting:', () {
     final mockEntry = Entry(
-      id: 4300,
-      simplified: "事实",
-      traditional: "事實",
-      pinyin: "shi4 shi2",
-      priority: 383.5,
-      hsk: 5,
-      wordLength: 2,
-      pinyinLength: 9,
-      definitions: "fact/measure word: §個|个§[ge4]");
+        id: 4300,
+        simplified: "事实",
+        traditional: "事實",
+        pinyin: "shi4 shi2",
+        priority: 383.5,
+        hsk: 5,
+        wordLength: 2,
+        pinyinLength: 9,
+        definitions: "fact/measure word: §個|个§[ge4]");
 
     test('Simplified', () {
-      final result = formatHeadword(mockEntry, ChineseMode.simplified, false, mockPrefs, themeData);
+      final result = formatHeadword(
+          mockEntry, ChineseMode.simplified, mockPrefs, themeData);
       expect(result.toPlainText(), '事实');
-      // Headword coloring should be covered by other unit tests, so it is 
+      // Headword coloring should be covered by other unit tests, so it is
       // only checked once here
       expect(result.children[0].children[0].style.color, tone4DefaultColor);
       expect(result.children[0].children[1].style.color, tone2DefaultColor);
     });
 
     test('Traditional', () {
-      expect(formatHeadword(mockEntry, ChineseMode.traditional, false, mockPrefs, themeData).toPlainText(), '事實');
+      expect(
+          formatHeadword(
+                  mockEntry, ChineseMode.traditional, mockPrefs, themeData)
+              .toPlainText(),
+          '事實');
     });
 
     test('Simplified and Traditional', () {
-      expect(formatHeadword(mockEntry, ChineseMode.simplifiedTraditional, false, mockPrefs, themeData).toPlainText(), '事实 (事實)');
+      expect(
+          formatHeadword(mockEntry, ChineseMode.simplifiedTraditional,
+                  mockPrefs, themeData)
+              .toPlainText(),
+          '事实 (事實)');
     });
 
     test('Traditional and Simplified', () {
-      expect(formatHeadword(mockEntry, ChineseMode.traditionalSimplified, false, mockPrefs, themeData).toPlainText(), '事實 (事实)');
+      expect(
+          formatHeadword(mockEntry, ChineseMode.traditionalSimplified,
+                  mockPrefs, themeData)
+              .toPlainText(),
+          '事實 (事实)');
     });
 
     test('Break line between alternatives', () {
-      expect(formatHeadword(mockEntry, ChineseMode.simplifiedTraditional, true, mockPrefs, themeData).toPlainText(), '事实\n(事實)');
+      expect(
+          formatHeadword(mockEntry, ChineseMode.simplifiedTraditional,
+                  mockPrefs, themeData,
+                  breakLine: true)
+              .toPlainText(),
+          '事实\n(事實)');
     });
 
     test('Alternative different size', () {
-      expect(true, false);
+      final result = formatHeadword(
+          mockEntry, ChineseMode.simplifiedTraditional, mockPrefs, themeData,
+          mainFontSize: 30, alternativeScalingFactor: 0.8);
+      expect(result.children[0].style.fontSize, 30);
+      for (var iChild = 2; iChild < result.children.length; iChild++) {
+        expect(result.children[iChild].style.fontSize, 24);
+      }
     });
-    
+
+    test('Alternative different size 2', () {
+      final result = formatHeadword(
+          mockEntry, ChineseMode.simplifiedTraditional, mockPrefs, themeData, alternativeScalingFactor: 0.6);
+      expect(result.children[0].style.fontSize, 14);
+      for (var iChild = 2; iChild < result.children.length; iChild++) {
+        expect(result.children[iChild].style.fontSize, 14*0.6);
+      }
+    });
   });
-
 }
-

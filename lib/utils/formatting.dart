@@ -98,11 +98,12 @@ bool isInt(String s) {
   }
 }
 
-TextSpan colorHeadword(
-    String headword, String pinyin, AppPreferences prefs, ThemeData themeData) {
+TextSpan colorHeadword(String headword, String pinyin, AppPreferences prefs,
+    {double fontSize = 14}) {
   final syllables = pinyin.split(' ');
 
-  TextSpan output = TextSpan(children: []);
+  TextSpan output =
+      TextSpan(children: [], style: TextStyle(fontSize: fontSize));
 
   // It's not easy to color the headword if there is no clear correspondance
   // between pinyin and headword, so those cases are ignored and returned in
@@ -136,23 +137,32 @@ TextSpan colorHeadword(
   return output;
 }
 
-TextSpan formatHeadword(Entry entry, int mode, bool breakLine, AppPreferences prefs, ThemeData themeData) {
-
-  final simplified = colorHeadword(entry.simplified, entry.pinyin, prefs, themeData);
-  final traditional = colorHeadword(entry.traditional, entry.pinyin, prefs, themeData);
-
-  bool showAlternative = mode == ChineseMode.simplifiedTraditional || mode == ChineseMode.traditionalSimplified;
+TextSpan formatHeadword(
+  Entry entry,
+  int mode,
+  AppPreferences prefs,
+  ThemeData themeData, {
+  bool breakLine = false,
+  double mainFontSize = 14,
+  double alternativeScalingFactor = 1,
+}) {
+  bool showAlternative = mode == ChineseMode.simplifiedTraditional ||
+      mode == ChineseMode.traditionalSimplified;
 
   TextSpan main;
   TextSpan alternative;
 
-  if (mode == ChineseMode.simplifiedTraditional || mode == ChineseMode.simplified) {
-    main = simplified;
-    alternative = traditional;
-  }
-  else {
-    main = traditional;
-    alternative = simplified;
+  if (mode == ChineseMode.simplifiedTraditional ||
+      mode == ChineseMode.simplified) {
+    main = colorHeadword(entry.simplified, entry.pinyin, prefs,
+        fontSize: mainFontSize);
+    alternative = colorHeadword(entry.traditional, entry.pinyin, prefs,
+        fontSize: mainFontSize * alternativeScalingFactor);
+  } else {
+    main = colorHeadword(entry.traditional, entry.pinyin, prefs,
+        fontSize: mainFontSize);
+    alternative = colorHeadword(entry.simplified, entry.pinyin, prefs,
+        fontSize: mainFontSize * alternativeScalingFactor);
   }
 
   final headword = TextSpan(children: [main]);
@@ -160,12 +170,23 @@ TextSpan formatHeadword(Entry entry, int mode, bool breakLine, AppPreferences pr
   if (showAlternative) {
     if (breakLine) {
       headword.children.add(TextSpan(text: '\n'));
-    }
-    else {
+    } else {
       headword.children.add(TextSpan(text: ' '));
     }
 
-    headword.children.addAll([TextSpan(text: '('), alternative, TextSpan(text: ')')]);
+    headword.children.addAll([
+      TextSpan(
+        text: '(',
+        style: TextStyle()
+            .copyWith(fontSize: mainFontSize * alternativeScalingFactor),
+      ),
+      alternative,
+      TextSpan(
+        text: ')',
+        style: TextStyle()
+            .copyWith(fontSize: mainFontSize * alternativeScalingFactor),
+      )
+    ]);
   }
 
   return headword;
