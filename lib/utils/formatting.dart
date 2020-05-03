@@ -103,6 +103,9 @@ TextSpan colorHeadword(
 
   TextSpan output = TextSpan(children: [], style: themeData.textTheme.body1);
 
+  // It's not easy to color the headword if there is no clear correspondance
+  // between pinyin and headword, so those cases are ignored and returned in
+  // regular text color
   if (syllables.length == headword.characters.length) {
     for (var iCharacter = 0;
         iCharacter < headword.characters.length;
@@ -112,12 +115,17 @@ TextSpan colorHeadword(
 
       final pinyinSyllable = syllables[iCharacter];
 
+      // Don't color digits (e.g., in 2019冠状病毒病 or 3C)
       if (isInt(pinyinSyllable[pinyinSyllable.length - 1]) &&
           !isInt(character)) {
         final tone = int.parse(pinyinSyllable[pinyinSyllable.length - 1]);
         output.children.add(TextSpan(
             text: character,
             style: TextStyle(color: prefs.getToneColor(tone))));
+      } else {
+        output.children.add(TextSpan(
+          text: character,
+        ));
       }
     }
   } else {

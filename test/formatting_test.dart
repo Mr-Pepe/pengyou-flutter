@@ -79,46 +79,31 @@ void main() {
       expect(
         colorHeadword("你", "ni1", mockPrefs, themeData),
         TextSpan(style: themeData.textTheme.body1, children: [
-          TextSpan(
-              text: '你',
-              style:
-                  TextStyle(color: tone1DefaultColor))
+          TextSpan(text: '你', style: TextStyle(color: tone1DefaultColor))
         ]),
       );
       expect(
         colorHeadword("你", "ni2", mockPrefs, themeData),
         TextSpan(style: themeData.textTheme.body1, children: [
-          TextSpan(
-              text: '你',
-              style:
-                  TextStyle(color: tone2DefaultColor))
+          TextSpan(text: '你', style: TextStyle(color: tone2DefaultColor))
         ]),
       );
       expect(
         colorHeadword("你", "ni3", mockPrefs, themeData),
         TextSpan(style: themeData.textTheme.body1, children: [
-          TextSpan(
-              text: '你',
-              style:
-                  TextStyle(color: tone3DefaultColor))
+          TextSpan(text: '你', style: TextStyle(color: tone3DefaultColor))
         ]),
       );
       expect(
         colorHeadword("你", "ni4", mockPrefs, themeData),
         TextSpan(style: themeData.textTheme.body1, children: [
-          TextSpan(
-              text: '你',
-              style:
-                  TextStyle(color: tone4DefaultColor))
+          TextSpan(text: '你', style: TextStyle(color: tone4DefaultColor))
         ]),
       );
       expect(
         colorHeadword("你", "ni5", mockPrefs, themeData),
         TextSpan(style: themeData.textTheme.body1, children: [
-          TextSpan(
-              text: '你',
-              style:
-                  TextStyle(color: tone5DefaultColor))
+          TextSpan(text: '你', style: TextStyle(color: tone5DefaultColor))
         ]),
       );
     });
@@ -127,35 +112,55 @@ void main() {
       expect(
           colorHeadword(
               "朋友妻不可欺", "peng2 you5 qi1 bu4 ke3 qi1", mockPrefs, themeData),
-          TextSpan(
-              style:
-                  themeData.textTheme.body1,
-              children: [
-                TextSpan(
-                  text: '朋',
-                  style: TextStyle(color: tone2DefaultColor),
-                ),
-                TextSpan(
-                  text: '友',
-                  style: TextStyle(color: tone5DefaultColor),
-                ),
-                TextSpan(
-                  text: '妻',
-                  style: TextStyle(color: tone1DefaultColor),
-                ),
-                TextSpan(
-                  text: '不',
-                  style: TextStyle(color: tone4DefaultColor),
-                ),
-                TextSpan(
-                  text: '可',
-                  style: TextStyle(color: tone3DefaultColor),
-                ),
-                TextSpan(
-                  text: '欺',
-                  style: TextStyle(color: tone1DefaultColor),
-                ),
-              ]));
+          TextSpan(style: themeData.textTheme.body1, children: [
+            TextSpan(
+              text: '朋',
+              style: TextStyle(color: tone2DefaultColor),
+            ),
+            TextSpan(
+              text: '友',
+              style: TextStyle(color: tone5DefaultColor),
+            ),
+            TextSpan(
+              text: '妻',
+              style: TextStyle(color: tone1DefaultColor),
+            ),
+            TextSpan(
+              text: '不',
+              style: TextStyle(color: tone4DefaultColor),
+            ),
+            TextSpan(
+              text: '可',
+              style: TextStyle(color: tone3DefaultColor),
+            ),
+            TextSpan(
+              text: '欺',
+              style: TextStyle(color: tone1DefaultColor),
+            ),
+          ]));
+
+      expect(
+          colorHeadword("3C", "san1 C", mockPrefs, themeData),
+          TextSpan(style: themeData.textTheme.body1, children: [
+            TextSpan(
+              text: '3',
+            ),
+            TextSpan(
+              text: 'C',
+            )
+          ]));
+
+      expect(
+          colorHeadword("三C", "san1 C", mockPrefs, themeData),
+          TextSpan(style: themeData.textTheme.body1, children: [
+            TextSpan(
+              text: '三',
+              style: TextStyle(color: tone1DefaultColor),
+            ),
+            TextSpan(
+              text: 'C',
+            )
+          ]));
     });
   });
 }
