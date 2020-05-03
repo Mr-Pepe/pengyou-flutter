@@ -21,10 +21,9 @@ class EntryCard extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.fromLTRB(
             mediumPadding, smallPadding, mediumPadding, smallPadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(children: <Widget>[
+        child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,21 +40,22 @@ class EntryCard extends StatelessWidget {
                       formatIntonation(entry.pinyin, prefs.intonationMode),
                       style: TextStyle(fontSize: entryCardPinyinFontSize),
                     ),
+                    Text(
+                      entry.definitions,
+                      maxLines: 3,
+                    ),
                   ],
                 ),
               ),
-              Text.rich(TextSpan(
-                  text: (entry.hsk != 7 && prefs.showHskLabels)
-                      ? 'HSK ' + entry.hsk.toString()
-                      : '',
-                  style: TextStyle(decoration: TextDecoration.underline))),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, mediumPadding-2, 0, 0),
+                child: (entry.hsk != 7 && prefs.showHskLabels)
+                    ? Text.rich(TextSpan(
+                        text: 'HSK ' + entry.hsk.toString(),
+                        style: TextStyle(decoration: TextDecoration.underline)))
+                    : Text.rich(TextSpan(text: '         ')),
+              )
             ]),
-            Text(
-              entry.definitions,
-              maxLines: 3,
-            ),
-          ],
-        ),
       ),
     );
   }
