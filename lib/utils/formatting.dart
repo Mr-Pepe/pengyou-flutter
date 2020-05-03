@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pengyou/models/entry.dart';
-import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/utils/enumsAndConstants.dart';
 import 'package:characters/characters.dart';
 
@@ -98,7 +97,7 @@ bool isInt(String s) {
   }
 }
 
-TextSpan colorHeadword(String headword, String pinyin, AppPreferences prefs,
+TextSpan colorHeadword(String headword, String pinyin, List<Color> toneColors,
     {double fontSize = 14}) {
   final syllables = pinyin.split(' ');
 
@@ -123,7 +122,7 @@ TextSpan colorHeadword(String headword, String pinyin, AppPreferences prefs,
         final tone = int.parse(pinyinSyllable[pinyinSyllable.length - 1]);
         output.children.add(TextSpan(
             text: character,
-            style: TextStyle(color: prefs.getToneColor(tone))));
+            style: TextStyle(color: toneColors[tone-1])));
       } else {
         output.children.add(TextSpan(
           text: character,
@@ -140,8 +139,7 @@ TextSpan colorHeadword(String headword, String pinyin, AppPreferences prefs,
 TextSpan formatHeadword(
   Entry entry,
   int mode,
-  AppPreferences prefs,
-  ThemeData themeData, {
+  List<Color> colors, {
   bool breakLine = false,
   double mainFontSize = 14,
   double alternativeScalingFactor = 1,
@@ -154,14 +152,14 @@ TextSpan formatHeadword(
 
   if (mode == ChineseMode.simplifiedTraditional ||
       mode == ChineseMode.simplified) {
-    main = colorHeadword(entry.simplified, entry.pinyin, prefs,
+    main = colorHeadword(entry.simplified, entry.pinyin, colors,
         fontSize: mainFontSize);
-    alternative = colorHeadword(entry.traditional, entry.pinyin, prefs,
+    alternative = colorHeadword(entry.traditional, entry.pinyin, colors,
         fontSize: mainFontSize * alternativeScalingFactor);
   } else {
-    main = colorHeadword(entry.traditional, entry.pinyin, prefs,
+    main = colorHeadword(entry.traditional, entry.pinyin, colors,
         fontSize: mainFontSize);
-    alternative = colorHeadword(entry.simplified, entry.pinyin, prefs,
+    alternative = colorHeadword(entry.simplified, entry.pinyin, colors,
         fontSize: mainFontSize * alternativeScalingFactor);
   }
 
