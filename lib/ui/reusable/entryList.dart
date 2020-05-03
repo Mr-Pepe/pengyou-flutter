@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pengyou/models/entry.dart';
 import 'package:pengyou/ui/reusable/entryCard.dart';
-import 'package:pengyou/values/dimensions.dart';
 
 class EntryList extends StatefulWidget {
   final List<Entry> entryList;
@@ -22,7 +21,7 @@ class EntryListState extends State<EntryList> {
     return ListView.separated(
         itemCount: widget.entryList.length,
         itemBuilder: (BuildContext context, int index) {
-          return EntryCard(entry: widget.entryList[index], intonationMode: widget.intonationMode);
+          return EntryCard(widget.entryList[index]);
         },
         separatorBuilder: (BuildContext context, int index) => const Divider(
           height: 0,

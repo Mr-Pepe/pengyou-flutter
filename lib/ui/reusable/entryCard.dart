@@ -7,13 +7,13 @@ import 'package:provider/provider.dart';
 
 class EntryCard extends StatelessWidget {
   final Entry entry;
-  final int intonationMode;
 
-  EntryCard({this.entry, this.intonationMode});
+  EntryCard(this.entry);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final prefs = Provider.of<AppPreferences>(context);
 
     return Card(
       color: theme.backgroundColor,
@@ -30,23 +30,24 @@ class EntryCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text.rich(
-                      colorHeadword(
-                          entry.simplified,
-                          entry.pinyin,
-                          Provider.of<AppPreferences>(context),
-                          Theme.of(context)),
+                      formatHeadword(
+                          entry, prefs.chineseMode, prefs.getToneColors(),
+                          mainFontSize: entryCardHeadwordFontSize,
+                          alternativeScalingFactor:
+                              prefs.alternativeHeadwordScalingFactor),
                       textAlign: TextAlign.start,
-                      style: TextStyle(fontSize: entryCardHeadwordFontSize),
                     ),
                     Text(
-                      formatIntonation(entry.pinyin, intonationMode),
+                      formatIntonation(entry.pinyin, prefs.intonationMode),
                       style: TextStyle(fontSize: entryCardPinyinFontSize),
                     ),
                   ],
                 ),
               ),
               Text.rich(TextSpan(
-                  text: 'HSK ' + entry.hsk.toString(),
+                  text: (entry.hsk != 7 && prefs.showHskLabels)
+                      ? 'HSK ' + entry.hsk.toString()
+                      : '',
                   style: TextStyle(decoration: TextDecoration.underline))),
             ]),
             Text(
