@@ -2,14 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:pengyou/models/entry.dart';
 import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/utils/enumsAndConstants.dart';
 import 'package:pengyou/utils/formatting.dart';
+import 'package:pengyou/utils/utils.dart';
 import 'package:pengyou/values/colors.dart';
 
 class MockPrefs extends Mock implements AppPreferences {}
 
 void main() {
+
+  final mockPrefs = MockPrefs();
+  ThemeData themeData = ThemeData();
+  when(mockPrefs.getToneColor(1)).thenReturn(tone1DefaultColor);
+  when(mockPrefs.getToneColor(2)).thenReturn(tone2DefaultColor);
+  when(mockPrefs.getToneColor(3)).thenReturn(tone3DefaultColor);
+  when(mockPrefs.getToneColor(4)).thenReturn(tone4DefaultColor);
+  when(mockPrefs.getToneColor(5)).thenReturn(tone5DefaultColor);
+
   group('Pinyin with tone marks formatting:', () {
     // Test according to https://en.wikipedia.org/wiki/Pinyin#Rules_for_placing_the_tone_mark
     test('Single vowels', () {
@@ -67,14 +78,6 @@ void main() {
   });
 
   group('Headword coloring:', () {
-    final mockPrefs = MockPrefs();
-    ThemeData themeData = ThemeData();
-    when(mockPrefs.getToneColor(1)).thenReturn(tone1DefaultColor);
-    when(mockPrefs.getToneColor(2)).thenReturn(tone2DefaultColor);
-    when(mockPrefs.getToneColor(3)).thenReturn(tone3DefaultColor);
-    when(mockPrefs.getToneColor(4)).thenReturn(tone4DefaultColor);
-    when(mockPrefs.getToneColor(5)).thenReturn(tone5DefaultColor);
-
     test('Single character coloring', () {
       final resultTone1 = colorHeadword("你", "ni1", mockPrefs, themeData);
       final resultTone2 = colorHeadword("你", "ni2", mockPrefs, themeData);
@@ -143,4 +146,49 @@ void main() {
           ]));
     });
   });
+
+  group('Headword formatting:', () {
+    final mockEntry = Entry(
+      id: 4300,
+      simplified: "事实",
+      traditional: "事實",
+      pinyin: "shi4 shi2",
+      priority: 383.5,
+      hsk: 5,
+      wordLength: 2,
+      pinyinLength: 9,
+      definitions: "fact/measure word: §個|个§[ge4]");
+
+    test('Simplified', () {
+      final result = formatHeadword(mockEntry, ChineseMode.simplified, false, mockPrefs, themeData);
+      expect(result.toPlainText(), '事实');
+      // Headword coloring should be covered by other unit tests, so it is 
+      // only checked once here
+      expect(result.children[0].children[0].style.color, tone4DefaultColor);
+      expect(result.children[0].children[1].style.color, tone2DefaultColor);
+    });
+
+    test('Traditional', () {
+      expect(formatHeadword(mockEntry, ChineseMode.traditional, false, mockPrefs, themeData).toPlainText(), '事實');
+    });
+
+    test('Simplified and Traditional', () {
+      expect(formatHeadword(mockEntry, ChineseMode.simplifiedTraditional, false, mockPrefs, themeData).toPlainText(), '事实 (事實)');
+    });
+
+    test('Traditional and Simplified', () {
+      expect(formatHeadword(mockEntry, ChineseMode.traditionalSimplified, false, mockPrefs, themeData).toPlainText(), '事實 (事实)');
+    });
+
+    test('Break line between alternatives', () {
+      expect(formatHeadword(mockEntry, ChineseMode.simplifiedTraditional, true, mockPrefs, themeData).toPlainText(), '事实\n(事實)');
+    });
+
+    test('Alternative different size', () {
+      expect(true, false);
+    });
+    
+  });
+
 }
+

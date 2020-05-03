@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pengyou/models/entry.dart';
 import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/utils/enumsAndConstants.dart';
 import 'package:characters/characters.dart';
@@ -133,4 +134,39 @@ TextSpan colorHeadword(
   }
 
   return output;
+}
+
+TextSpan formatHeadword(Entry entry, int mode, bool breakLine, AppPreferences prefs, ThemeData themeData) {
+
+  final simplified = colorHeadword(entry.simplified, entry.pinyin, prefs, themeData);
+  final traditional = colorHeadword(entry.traditional, entry.pinyin, prefs, themeData);
+
+  bool showAlternative = mode == ChineseMode.simplifiedTraditional || mode == ChineseMode.traditionalSimplified;
+
+  TextSpan main;
+  TextSpan alternative;
+
+  if (mode == ChineseMode.simplifiedTraditional || mode == ChineseMode.simplified) {
+    main = simplified;
+    alternative = traditional;
+  }
+  else {
+    main = traditional;
+    alternative = simplified;
+  }
+
+  final headword = TextSpan(children: [main]);
+
+  if (showAlternative) {
+    if (breakLine) {
+      headword.children.add(TextSpan(text: '\n'));
+    }
+    else {
+      headword.children.add(TextSpan(text: ' '));
+    }
+
+    headword.children.addAll([TextSpan(text: '('), alternative, TextSpan(text: ')')]);
+  }
+
+  return headword;
 }
