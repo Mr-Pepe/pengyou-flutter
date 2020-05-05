@@ -21,6 +21,7 @@ const String TONE4_COLOR = "tone4_color";
 const String TONE5_COLOR = "tone5_color";
 const String ALTERNATIVE_HEADWORD_SCALING_FACTOR =
     "alternative_headword_scaling_factor";
+const String ALTERNATIVE_DASHED = "alternative_dashed";
 const String SHOW_HSK_LABELS = "show_hsk_label";
 
 class AppPreferences with ChangeNotifier {
@@ -44,6 +45,7 @@ class AppPreferences with ChangeNotifier {
 
     _prefs.getDouble(ALTERNATIVE_HEADWORD_SCALING_FACTOR) ??
         _prefs.setDouble(ALTERNATIVE_HEADWORD_SCALING_FACTOR, 0.8);
+    _prefs.getBool(ALTERNATIVE_HEADWORD_SCALING_FACTOR) ?? _prefs.setBool(ALTERNATIVE_DASHED, false);
 
     _prefs.getInt(CHINESE_MODE) ?? _prefs.setInt(CHINESE_MODE, 0);
 
@@ -67,6 +69,11 @@ class AppPreferences with ChangeNotifier {
     notifyListeners();
   }
 
+  void setAlternativeDashed(bool flag) {
+    _prefs.setBool(ALTERNATIVE_DASHED, flag);
+    notifyListeners();
+  }
+
   void setShowHskLabels(bool flag) {
     _prefs.setBool(SHOW_HSK_LABELS, flag);
     notifyListeners();
@@ -75,6 +82,7 @@ class AppPreferences with ChangeNotifier {
   int get chineseMode => _prefs.getInt(CHINESE_MODE);
   double get alternativeHeadwordScalingFactor =>
       _prefs.getDouble(ALTERNATIVE_HEADWORD_SCALING_FACTOR);
+  bool get alternativeDashed => _prefs.getBool(ALTERNATIVE_DASHED);
 
   int get intonationMode => _prefs.getInt(INTONATION_MODE);
 

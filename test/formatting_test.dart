@@ -147,6 +147,17 @@ void main() {
         pinyinLength: 9,
         definitions: "fact/measure word: §個|个§[ge4]");
 
+    final mockEntry2 = Entry(
+    id: 4300,
+    simplified: "事实",
+    traditional: "事实",
+    pinyin: "shi4 shi2",
+    priority: 383.5,
+    hsk: 5,
+    wordLength: 2,
+    pinyinLength: 9,
+    definitions: "fact/measure word: §個|个§[ge4]");
+
     test('Simplified', () {
       final result = formatHeadword(
           mockEntry, ChineseMode.simplified, toneColors);
@@ -207,6 +218,18 @@ void main() {
       for (var iChild = 2; iChild < result.children.length; iChild++) {
         expect(result.children[iChild].style.fontSize, 14*0.6);
       }
+    });
+
+    test('Shows alternative only if different', () {
+      final result = formatHeadword(
+          mockEntry2, ChineseMode.simplifiedTraditional, toneColors);
+      expect(result.toPlainText(), "事实");
+    });
+
+    test('Show dashed out alternative', () {
+      final result = formatHeadword(
+          mockEntry, ChineseMode.simplifiedTraditional, toneColors, alternativeDashed: true);
+      expect(result.toPlainText(), "事实 (-實)");
     });
   });
 }

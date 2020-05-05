@@ -140,6 +140,7 @@ TextSpan formatHeadword(
   Entry entry,
   int mode,
   List<Color> colors, {
+  bool alternativeDashed = false,
   bool breakLine = false,
   double mainFontSize = 14,
   double alternativeScalingFactor = 1,
@@ -165,11 +166,15 @@ TextSpan formatHeadword(
 
   final headword = TextSpan(children: [main]);
 
-  if (showAlternative) {
+  if (showAlternative && main.toPlainText() != alternative.toPlainText()) {
     if (breakLine) {
       headword.children.add(TextSpan(text: '\n'));
     } else {
       headword.children.add(TextSpan(text: ' '));
+    }
+
+    if (alternativeDashed) {
+      alternative = dashOutAlternative(main, alternative);
     }
 
     headword.children.addAll([
@@ -188,4 +193,18 @@ TextSpan formatHeadword(
   }
 
   return headword;
+}
+
+TextSpan dashOutAlternative(TextSpan main, TextSpan alternative) {
+  if (main.children.length == alternative.children.length) {
+    for (var iCharacter = 0;
+      iCharacter < main.children.length;
+      iCharacter++) {
+      // Use the characters package to handle surrogate pairs
+      if (main.children[iCharacter].toPlainText() == alternative.children[iCharacter].toPlainText()) {
+        alternative.children[iCharacter] = TextSpan(text: '-', style: alternative.children[iCharacter].style);
+      }
+    }
+  }
+  return alternative;
 }
