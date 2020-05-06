@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/values/colors.dart';
 
 class AppTheme {
@@ -41,4 +42,8 @@ class AppTheme {
     /// Return the themeData which MaterialApp can now use
     return t;
   }
+}
+
+extension CustomColorScheme on ColorScheme {
+  Color get modeSwitchBackgroundColor => modeSwitchColor;
 }

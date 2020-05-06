@@ -15,8 +15,12 @@ Color darkThemeColorOnPrimary = Color(0xFFEEEEEE);
 Color darkThemeGeneralTextColor = Color(0xFFEEEEEE);
 Color darkThemeColorBackground = Color(0xFF121212);
 
+
 Color tone1DefaultColor = Color(0xFF6FB6D4);
 Color tone2DefaultColor = Color(0xFF977CF7);
 Color tone3DefaultColor = Color(0xFF73c563);
 Color tone4DefaultColor = Color(0xFFC95050);
 Color tone5DefaultColor = Color(0xFF999999);
+
+
+Color modeSwitchColor = Color(0x33FFFFFF);
