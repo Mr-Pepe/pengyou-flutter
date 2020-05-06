@@ -40,12 +40,14 @@ class PengyouApp extends StatelessWidget {
               EntryRepository(db: dbProvider),
         ),
       ],
-      child: MaterialApp(
-        title: AppStrings.applicationName,
-        theme: AppTheme(isDark: false).themeData,
-        darkTheme: AppTheme(isDark: true).themeData,
-        home: HomeView(),
-      ),
+      child: Consumer<AppPreferences>(builder: (context, prefs, child) {
+        return MaterialApp(
+          title: AppStrings.applicationName,
+          theme: AppTheme(isDark: prefs.themeIsDark).themeData,
+          darkTheme: AppTheme(isDark: true).themeData,
+          home: HomeView(),
+        );
+      }),
     );
   }
 }

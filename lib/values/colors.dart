@@ -6,6 +6,14 @@ Color lightThemeColorSecondary = Color(0xFFEDCB85);
 Color lightThemeColorAccent = Color(0xFFB5333D);
 Color lightThemeColorOnPrimary = Colors.white;
 Color lightThemeGeneralTextColor = Color(0xFF323232);
+Color lightThemeColorBackground = Colors.white;
+
+Color darkThemeColorPrimary = Color(0xFF2B2B2B);
+Color darkThemeColorSecondary = Color(0xFF171717);
+Color darkThemeColorAccent = Color(0xFFEEEEEE);
+Color darkThemeColorOnPrimary = Color(0xFFEEEEEE);
+Color darkThemeGeneralTextColor = Color(0xFFEEEEEE);
+Color darkThemeColorBackground = Color(0xFF121212);
 
 Color tone1DefaultColor = Color(0xFF6FB6D4);
 Color tone2DefaultColor = Color(0xFF977CF7);

@@ -30,6 +30,7 @@ class HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Theme.of(context).highlightColor,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(CustomIcons.ic_dictionary),

@@ -23,6 +23,7 @@ const String ALTERNATIVE_HEADWORD_SCALING_FACTOR =
     "alternative_headword_scaling_factor";
 const String ALTERNATIVE_DASHED = "alternative_dashed";
 const String SHOW_HSK_LABELS = "show_hsk_label";
+const String THEME_IS_DARK = "theme_is_dark";
 
 class AppPreferences with ChangeNotifier {
   SharedPreferences _prefs;
@@ -51,6 +52,13 @@ class AppPreferences with ChangeNotifier {
 
     _prefs.getBool(SHOW_HSK_LABELS) ?? _prefs.setBool(SHOW_HSK_LABELS, true);
 
+    _prefs.getBool(THEME_IS_DARK) ?? _prefs.setBool(THEME_IS_DARK, false);
+
+    notifyListeners();
+  }
+
+  void setDarkTheme(bool flag) {
+    _prefs.setBool(THEME_IS_DARK, flag);
     notifyListeners();
   }
 
@@ -87,6 +95,8 @@ class AppPreferences with ChangeNotifier {
   int get intonationMode => _prefs.getInt(INTONATION_MODE);
 
   bool get showHskLabels => _prefs.getBool(SHOW_HSK_LABELS);
+
+  bool get themeIsDark => _prefs.getBool(THEME_IS_DARK);
 
   List<Color> getToneColors() {
     return [tone1Color, tone2Color, tone3Color, tone4Color, tone5Color];

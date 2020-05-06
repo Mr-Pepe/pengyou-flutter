@@ -11,32 +11,31 @@ class AppTheme {
     /// Create a TextTheme and ColorScheme, that we can use to generate ThemeData
     TextTheme textTheme =
         (isDark ? ThemeData.dark() : ThemeData.light()).textTheme.copyWith(
-        
         );
 
     ColorScheme colorScheme = ColorScheme(
         // Decide how you want to apply your own custom them, to the MaterialApp
         brightness: isDark ? Brightness.dark : Brightness.light,
-        primary: lightThemeColorPrimary,
-        onPrimary: Colors.white,
-        primaryVariant: lightThemeColorPrimary,
-        secondary: lightThemeColorSecondary,
-        secondaryVariant: lightThemeColorSecondary,
-        background: Colors.white,
-        surface: lightThemeColorPrimary,
-        onBackground: lightThemeGeneralTextColor,
-        onSurface: lightThemeColorOnPrimary,
-        onError: Colors.white,
-        onSecondary: Colors.white,
+        primary: isDark ? darkThemeColorPrimary : lightThemeColorPrimary,
+        onPrimary: isDark ? darkThemeColorOnPrimary : lightThemeColorOnPrimary,
+        primaryVariant: isDark ? darkThemeColorPrimary : lightThemeColorPrimary,
+        secondary: isDark ? darkThemeColorSecondary : lightThemeColorSecondary,
+        secondaryVariant: isDark ? darkThemeColorSecondary : lightThemeColorSecondary,
+        background: isDark ? darkThemeColorBackground : lightThemeColorBackground,
+        surface: isDark ? darkThemeColorPrimary : lightThemeColorPrimary,
+        onBackground: isDark ? darkThemeGeneralTextColor : lightThemeGeneralTextColor,
+        onSurface: isDark ? darkThemeColorOnPrimary : lightThemeColorOnPrimary,
+        onError: isDark ? Colors.black : Colors.white,
+        onSecondary: isDark ? Colors.black : Colors.white,
         error: Colors.red.shade400);
 
     /// Now that we have ColorScheme and TextTheme, we can create the ThemeData
     var t =
         ThemeData.from(textTheme: textTheme, colorScheme: colorScheme).copyWith(
-      buttonColor: lightThemeColorPrimary,
-      cursorColor: lightThemeColorPrimary,
-      highlightColor: lightThemeColorPrimary,
-      toggleableActiveColor: lightThemeColorPrimary,
+      buttonColor: isDark ? darkThemeColorAccent : lightThemeColorPrimary,
+      cursorColor: isDark ? darkThemeColorAccent : lightThemeColorPrimary,
+      highlightColor: isDark ? darkThemeColorAccent : lightThemeColorPrimary,
+      toggleableActiveColor: isDark ? darkThemeColorAccent : lightThemeColorPrimary,
     );
 
     /// Return the themeData which MaterialApp can now use
