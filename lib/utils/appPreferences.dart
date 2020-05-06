@@ -45,7 +45,7 @@ class AppPreferences with ChangeNotifier {
 
     _prefs.getDouble(ALTERNATIVE_HEADWORD_SCALING_FACTOR) ??
         _prefs.setDouble(ALTERNATIVE_HEADWORD_SCALING_FACTOR, 0.8);
-    _prefs.getBool(ALTERNATIVE_HEADWORD_SCALING_FACTOR) ?? _prefs.setBool(ALTERNATIVE_DASHED, false);
+    _prefs.getBool(ALTERNATIVE_DASHED) ?? _prefs.setBool(ALTERNATIVE_DASHED, false);
 
     _prefs.getInt(CHINESE_MODE) ?? _prefs.setInt(CHINESE_MODE, 0);
 

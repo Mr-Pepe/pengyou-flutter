@@ -5,7 +5,156 @@ import 'package:pengyou/models/entry.dart';
 import 'package:pengyou/utils/enumsAndConstants.dart';
 import 'package:characters/characters.dart';
 
-void formatDefinitions() {}
+List<TextSpan> formatDefinitions(
+    String rawDefinitionsString, int chineseMode, int intonationMode) {
+  List<TextSpan> formattedDefinitions = <TextSpan>[];
+
+  if (rawDefinitionsString.isNotEmpty) {
+    List<String> rawDefinitions = rawDefinitionsString.split('/');
+
+    for (var rawDefinition in rawDefinitions) {
+      // Find Chinese words and pinyin and format them according to
+      // chineseMode and intonationMode
+      // Chinese words are searched by looking for pairs of '§'
+      // Pinyin is searched for by looking at pairs of square brackets
+      // All this magic can probably be done shorter with some regular expressions
+      if (rawDefinition.contains('§') || rawDefinition.contains('[')) {
+        String formattedDefinition = '';
+
+        bool inPinyin = false;
+        bool inChinese = false;
+
+        String chineseWord = '';
+        String pinyin = '';
+
+        String simplified;
+        String traditional = '';
+
+        for (var iCharacter = 0;
+            iCharacter < rawDefinition.characters.length;
+            iCharacter++) {
+          // Use the characters package to handle surrogate pairs
+          final character =
+              rawDefinition.characters.skip(iCharacter).take(1).toString();
+
+
+          if (inChinese) {
+
+            // If inChinese is true and a § is found, that means the end 
+            // of the word is reached
+            if (character == '§') {
+              if (traditional.isEmpty) {
+                simplified = chineseWord;
+                traditional = chineseWord;
+              }
+              else {
+                simplified = chineseWord;
+              }
+
+              String word;
+
+              switch (chineseMode) {
+                case ChineseMode.simplified:
+                  word = simplified;
+                  break;
+                case ChineseMode.simplifiedTraditional:
+                  if (simplified == traditional) {
+                    word = simplified;
+                  }
+                  else {
+                    word = simplified + '(' + traditional + ')';
+                  }
+                  break;
+                case ChineseMode.traditional:
+                  word = traditional;
+                  break;
+                case ChineseMode.traditionalSimplified:
+                  if (simplified == traditional) {
+                    word = traditional;
+                  }
+                  else {
+                    word = traditional + '(' + simplified + ')';
+                  }
+                  break;
+                default:
+                  word = '';
+              }
+
+              // Try to find pinyin corresponding to this word so they can be bundled
+              // together for searching the dictionary
+              String tmpPinyin = '';
+              bool tmpInPinyin = false;
+
+              for (var i = iCharacter+1; i < rawDefinition.characters.length; i++) {
+                final tmpCharacter =
+                  rawDefinition.characters.skip(i).take(1).toString();
+
+                if (tmpCharacter == ']' || tmpCharacter == '§') {
+                  break;
+                }
+                else if (tmpInPinyin) {
+                  tmpPinyin += tmpCharacter.toString();
+                }
+                else if (tmpCharacter == '[') {
+                  tmpInPinyin = true;
+                }
+              }
+
+              // TODO: Implement links
+
+              formattedDefinition += word;
+
+              simplified = '';
+              traditional = '';
+              chineseWord = '';
+              inChinese = false;
+            }
+            else if (character == '|') {
+              traditional = chineseWord;
+              chineseWord = '';
+            }
+            else {
+              chineseWord += character.toString();
+            }
+          }
+          else if (character == '§') {
+            inChinese = true;
+          }
+          else if (inPinyin) {
+            if (character == ']') {
+              formattedDefinition += formatIntonation(pinyin, intonationMode);
+              formattedDefinition += character;
+              inPinyin = false;
+              pinyin = '';
+            }
+            else {
+              pinyin += character;
+            }
+          }
+          else if (character == '[') {
+            inPinyin = true;
+
+            // Add whitespace if necessary
+            if (formattedDefinition[formattedDefinition.length-1] != ' ') {
+              formattedDefinition += ' ';
+            }
+
+            formattedDefinition += character.toString();
+          }
+          else {
+            formattedDefinition += character.toString();
+          }
+        }
+
+        formattedDefinitions.add(TextSpan(text: formattedDefinition));
+      } else {
+        formattedDefinitions.add(TextSpan(text: rawDefinition));
+      }
+    }
+  }
+
+  return formattedDefinitions;
+}
 
 /// Formats pinyin from CEDICT given a desired formatting, like mark or number notation.
 ///
@@ -121,8 +270,7 @@ TextSpan colorHeadword(String headword, String pinyin, List<Color> toneColors,
           !isInt(character)) {
         final tone = int.parse(pinyinSyllable[pinyinSyllable.length - 1]);
         output.children.add(TextSpan(
-            text: character,
-            style: TextStyle(color: toneColors[tone-1])));
+            text: character, style: TextStyle(color: toneColors[tone - 1])));
       } else {
         output.children.add(TextSpan(
           text: character,
@@ -197,12 +345,11 @@ TextSpan formatHeadword(
 
 TextSpan dashOutAlternative(TextSpan main, TextSpan alternative) {
   if (main.children.length == alternative.children.length) {
-    for (var iCharacter = 0;
-      iCharacter < main.children.length;
-      iCharacter++) {
-      // Use the characters package to handle surrogate pairs
-      if (main.children[iCharacter].toPlainText() == alternative.children[iCharacter].toPlainText()) {
-        alternative.children[iCharacter] = TextSpan(text: '-', style: alternative.children[iCharacter].style);
+    for (var iCharacter = 0; iCharacter < main.children.length; iCharacter++) {
+      if (main.children[iCharacter].toPlainText() ==
+          alternative.children[iCharacter].toPlainText()) {
+        alternative.children[iCharacter] =
+            TextSpan(text: '-', style: alternative.children[iCharacter].style);
       }
     }
   }

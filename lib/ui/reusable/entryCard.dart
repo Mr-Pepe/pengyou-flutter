@@ -3,6 +3,7 @@ import 'package:pengyou/models/entry.dart';
 import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/utils/formatting.dart';
 import 'package:pengyou/values/dimensions.dart';
+import 'package:pengyou/values/strings.dart';
 import 'package:provider/provider.dart';
 
 class EntryCard extends StatelessWidget {
@@ -14,6 +15,23 @@ class EntryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final prefs = Provider.of<AppPreferences>(context);
+
+    final formattedDefinitions = formatDefinitions(entry.definitions, prefs.chineseMode, prefs.intonationMode);
+
+    TextSpan definitions = TextSpan(children: []);
+
+    if (formattedDefinitions.isEmpty) {
+      definitions = TextSpan(text: AppStrings.noDefinitionFound, style: TextStyle(fontStyle: FontStyle.italic));
+    }
+    else {
+      for (var iDefinition = 0; iDefinition < formattedDefinitions.length; iDefinition++) {
+        definitions.children.add(TextSpan(text: (iDefinition + 1).toString() + ' ', style: TextStyle(fontWeight: FontWeight.bold)));
+        definitions.children.add(formattedDefinitions[iDefinition]);
+        if (iDefinition < formattedDefinitions.length - 1) {
+          definitions.children.add(TextSpan(text: ' '));
+        }
+      }
+    }
 
     return Card(
       color: theme.backgroundColor,
@@ -40,8 +58,8 @@ class EntryCard extends StatelessWidget {
                       formatIntonation(entry.pinyin, prefs.intonationMode),
                       style: TextStyle(fontSize: entryCardPinyinFontSize),
                     ),
-                    Text(
-                      entry.definitions,
+                    Text.rich(
+                      definitions,
                       maxLines: 3,
                     ),
                   ],

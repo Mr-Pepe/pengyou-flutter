@@ -95,7 +95,7 @@ void main() {
     final hskFinder = find.byWidgetPredicate(
         (widget) => (fromRichTextToPlainText(widget) ?? '').contains('HSK'));
     final definitionFinder = find.byWidgetPredicate((widget) =>
-        fromRichTextToPlainText(widget) == '1 fact 2 measure word: 個(个) [gè]');
+        fromRichTextToPlainText(widget) == '1 fact 2 measure word: 個(个) [ge4]');
 
     expect(headwordFinder, findsOneWidget);
     expect(pinyinFinder, findsOneWidget);
@@ -104,7 +104,6 @@ void main() {
   });
 
   testWidgets(
-      // TODO: Test Zhuyin here once implemented
       'Entry card using traditional, mark notation, and disabled HSK tag',
       (WidgetTester tester) async {
     when(mockPrefs.chineseMode).thenReturn(ChineseMode.traditional);
@@ -126,11 +125,14 @@ void main() {
     final hskFinder = find.byWidgetPredicate(
         (widget) => (fromRichTextToPlainText(widget) ?? '').contains('HSK'));
     final definitionFinder = find.byWidgetPredicate((widget) =>
-        fromRichTextToPlainText(widget) == '1 fact 2 measure word: 個(个) [gè]');
+        fromRichTextToPlainText(widget) == '1 fact 2 measure word: 個 [gè]');
 
     expect(headwordFinder, findsOneWidget);
     expect(pinyinFinder, findsOneWidget);
     expect(hskFinder, findsNothing);
     expect(definitionFinder, findsOneWidget);
   });
+
+
+  // TODO: Test Zhuyin here once implemented
 }

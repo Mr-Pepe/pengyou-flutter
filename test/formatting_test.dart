@@ -232,4 +232,50 @@ void main() {
       expect(result.toPlainText(), "事实 (-實)");
     });
   });
+
+  group('Definition formatting:', () {
+    final mockEntry = Entry(definitions: "definition1/definition2/definition3");
+
+    final mockEntry2 = Entry(definitions: "fact/measure word: §個|个§[ge4]");
+
+    final mockEntry3 = Entry(definitions: "fact/measure word: §个|个§[ge4]");
+
+    test('Definitions without links', () {
+      List<TextSpan> result = formatDefinitions(mockEntry.definitions, ChineseMode.simplified, IntonationMode.pinyinMarks);
+
+      expect(result.length, 3);
+      expect(result[0].toPlainText(), 'definition1');
+      expect(result[1].toPlainText(), 'definition2');
+      expect(result[2].toPlainText(), 'definition3');
+    });
+
+    test('Definitions with links, chineseMode: Simplified, intonationMode: pinyinNumbers', () {
+      List<TextSpan> result = formatDefinitions(mockEntry2.definitions, ChineseMode.simplified, IntonationMode.pinyinNumbers);
+
+      expect(result.length, 2);
+      expect(result[0].toPlainText(), 'fact');
+      expect(result[1].toPlainText(), 'measure word: 个 [ge4]');
+    });
+
+    test('Definitions with links, chineseMode: TraditionalSimplified, intonationMode: pinyinMarks', () {
+      List<TextSpan> result = formatDefinitions(mockEntry2.definitions, ChineseMode.traditionalSimplified, IntonationMode.pinyinMarks);
+
+      expect(result.length, 2);
+      expect(result[0].toPlainText(), 'fact');
+      expect(result[1].toPlainText(), 'measure word: 個(个) [gè]');
+    });
+
+    test('Definitions with links, chineseMode: SimplifiedTraditional, intonationMode: pinyinNumbers, alternative the same', () {
+      List<TextSpan> result = formatDefinitions(mockEntry3.definitions, ChineseMode.simplifiedTraditional, IntonationMode.pinyinNumbers);
+
+      expect(result.length, 2);
+      expect(result[0].toPlainText(), 'fact');
+      expect(result[1].toPlainText(), 'measure word: 个 [ge4]');
+    });
+
+
+
+
+    //TODO: Test Zhuyin here when implemented
+  });
 }
