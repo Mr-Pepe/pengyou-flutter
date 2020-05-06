@@ -42,8 +42,9 @@ class _DictionarySearchViewState extends State<DictionarySearchView> {
                 padding: EdgeInsets.fromLTRB(largePadding, smallPadding, largePadding, mediumPadding),
                 decoration: BoxDecoration(),
                 child: TextField(
-                  style: TextStyle(
-                      color: theme.colorScheme.onPrimary, fontSize: 20),
+                  style: theme.textTheme.body1.copyWith(
+                      color: theme.colorScheme.onPrimary,
+                      fontSize: 20),
                   controller: _controller,
                   onChanged: model.search,
                   autofocus: true,

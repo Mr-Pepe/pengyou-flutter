@@ -11,7 +11,7 @@ class AppTheme {
   ThemeData get themeData {
     /// Create a TextTheme and ColorScheme, that we can use to generate ThemeData
     TextTheme textTheme =
-        (isDark ? ThemeData.dark() : ThemeData.light()).textTheme.copyWith(
+        (isDark ? ThemeData.dark() : ThemeData.light()).textTheme.copyWith(body1: TextStyle(fontFamily: 'SourceSansPro')
         );
 
     ColorScheme colorScheme = ColorScheme(
