@@ -33,7 +33,7 @@ final String tableTradToSimplPhrases = 'trad_to_simpl_phrases';
 // columnTraditional
 // columnSimplified
 
-const int MAX_SEARCH_RESULTS = 1001;
+const int MAX_SEARCH_RESULTS = 201;
 
 class DBProvider {
   final String _databaseName = "data.db";
@@ -114,7 +114,7 @@ class DBProvider {
         tableEntries +
         ' JOIN ' +
         tableEntriesFts +
-        " ON entries.id == entriesFts.docId WHERE entriesFts.definitions MATCH ?", [query]);
+        " ON entries.id == entriesFts.docId WHERE entriesFts.definitions MATCH ? LIMIT ?", [query, MAX_SEARCH_RESULTS]);
 
     if (maps.length > 0) {
       return [

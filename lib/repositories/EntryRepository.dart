@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:pengyou/dataSources/appDatabase.dart';
 import 'package:pengyou/models/entry.dart';
 import 'package:characters/characters.dart';
@@ -7,8 +9,7 @@ class EntryRepository {
 
   final DBProvider db;
 
-  Future<List<Entry>> searchForChinese(String rawQuery) async {
-    // TODO: Turn this into a stream so it returns available results early
+  Stream<List<Entry>> searchForChinese(String rawQuery) async* {
     final cleanedQuery = cleanChineseSearchQuery(rawQuery);
 
     // Characters and detected phrases in the query are converted to simplified Chinese
@@ -18,10 +19,22 @@ class EntryRepository {
 
     List<Entry> results = <Entry>[];
 
+    results = await db.searchInDictBySimplifiedChinese(cleanedQuery, cleanedQuery + 'z');
+
+    if (results.isNotEmpty) {
+      results = LinkedHashSet<Entry>.from(results).toList();
+      yield results;
+    }
+
     for (var iQuery = 0; iQuery < queries.length; iQuery++) {
       final query = queries[iQuery];
       results
           .addAll(await db.searchInDictBySimplifiedChinese(query, query + 'z'));
+
+      if (results.isNotEmpty) {
+        results = LinkedHashSet<Entry>.from(results).toList();
+        yield results;
+      }
     }
 
     // If nothing found so far, search for exact matches in traditional Chinese
@@ -31,7 +44,7 @@ class EntryRepository {
           cleanedQuery, cleanedQuery + 'z'));
     }
 
-    return results;
+    yield LinkedHashSet<Entry>.from(results).toList();
   }
 
   Future<List<Entry>> searchForEnglish(String rawQuery) async {

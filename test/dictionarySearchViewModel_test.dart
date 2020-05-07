@@ -23,17 +23,13 @@ void main() {
   final model = DictionarySearchViewModel(mockEntryRepository);
 
   when(mockEntryRepository.searchForChinese("fei"))
-        .thenAnswer((_) async => Future.value([mockEntry]));
+        .thenAnswer((_) => Stream.value([mockEntry]));
   when(mockEntryRepository.searchForEnglish("fei"))
         .thenAnswer((_) async => Future.value([mockEntry]));
   when(mockEntryRepository.searchForEnglish("*fei*"))
         .thenAnswer((_) async => Future.value([mockEntry, mockEntry]));
-
+  
   test('Search', () async {
-
-    when(mockEntryRepository.searchForChinese("fei"))
-        .thenAnswer((_) async => Future.value([mockEntry]));
-
     await model.search("fei");
 
     expect(model.chineseSearchResults.length, 1);
