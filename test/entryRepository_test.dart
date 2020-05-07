@@ -101,4 +101,18 @@ void main() {
       expect(simplifiedQueries.contains('乱乾𫷷'), true);
     });
   });
+
+  group('English query cleaning', () {
+    test('Trim', () {
+      expect(repository.cleanEnglishSearchQuery("  abc cde f   "), "abc cde f");
+    });
+
+    test('To lower case', () {
+      expect(repository.cleanEnglishSearchQuery("ABcD"), "abcd");
+    });
+
+    test('To lower case and trim', () {
+      expect(repository.cleanEnglishSearchQuery("   A Bc   D  "), "a bc   d");
+    });
+  });
 }

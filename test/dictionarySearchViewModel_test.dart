@@ -29,4 +29,16 @@ void main() {
 
     expect(model.chineseSearchResults.length, 1);
   });
+
+  test('Search for English', () async {
+    final mockEntryRepository = MockEntryRepository();
+    final model = DictionarySearchViewModel(mockEntryRepository);
+
+    when(mockEntryRepository.searchForEnglish("yeah"))
+        .thenAnswer((_) async => Future.value([mockEntry]));
+
+    await model.search("fei");
+
+    expect(model.chineseSearchResults.length, 1);
+  })
 }

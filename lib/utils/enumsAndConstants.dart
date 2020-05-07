@@ -11,7 +11,7 @@ class ChineseMode {
   static const int traditionalSimplified = 3;
 }
 
-class AppTheme {
-  static const int light = 0;
-  static const int dark = 1;
+class SearchMode {
+  static const int byChineseInDictionary = 0;
+  static const int byEnglishInDictionary = 1;
 }

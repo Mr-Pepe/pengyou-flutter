@@ -19,7 +19,7 @@ class AppTheme {
         brightness: isDark ? Brightness.dark : Brightness.light,
         primary: isDark ? darkThemeColorPrimary : lightThemeColorPrimary,
         onPrimary: isDark ? darkThemeColorOnPrimary : lightThemeColorOnPrimary,
-        primaryVariant: isDark ? darkThemeColorPrimary : lightThemeColorPrimary,
+        primaryVariant: isDark ? darkThemeColorPrimaryVariant : lightThemeColorPrimaryVariant,
         secondary: isDark ? darkThemeColorSecondary : lightThemeColorSecondary,
         secondaryVariant: isDark ? darkThemeColorSecondary : lightThemeColorSecondary,
         background: isDark ? darkThemeColorBackground : lightThemeColorBackground,

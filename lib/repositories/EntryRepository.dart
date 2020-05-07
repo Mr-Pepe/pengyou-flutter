@@ -34,7 +34,13 @@ class EntryRepository {
     return results;
   }
 
-  Future<Entry> searchForEnglish(String query) async {}
+  Future<List<Entry>> searchForEnglish(String rawQuery) async {
+    final cleanedQuery = cleanEnglishSearchQuery(rawQuery);
+
+    List<Entry> results = await db.searchInDictByEnglish(cleanedQuery);
+
+    return results;
+  }
 
   String cleanChineseSearchQuery(String query) {
     return query
@@ -42,6 +48,10 @@ class EntryRepository {
         .replaceAll('ü', 'u:')
         .replaceAll('v', 'u:')
         .replaceAll(' ', '');
+  }
+
+  String cleanEnglishSearchQuery(String query) {
+    return query.trim().toLowerCase();
   }
 
   Future<List<String>> getSimplifiedQueries(String originalQuery) async {

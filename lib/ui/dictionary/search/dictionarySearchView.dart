@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pengyou/models/entry.dart';
 import 'package:pengyou/ui/reusable/entryList.dart';
 import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/utils/enumsAndConstants.dart';
@@ -33,18 +34,32 @@ class _DictionarySearchViewState extends State<DictionarySearchView> {
           builder: (context, model, preferences, child) {
         // model.search('ni');
 
+
+        List<Entry> selectResults(int searchMode) {
+          switch (searchMode) {
+            case SearchMode.byChineseInDictionary:
+              return model.chineseSearchResults;
+              break;
+            case SearchMode.byEnglishInDictionary:
+              return model.englishSearchResults;
+              break;
+            default:
+              return model.chineseSearchResults;
+          }
+        }
+
         return Scaffold(
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(100),
             child: AppBar(
               backgroundColor: theme.colorScheme.primary,
               title: Container(
-                padding: EdgeInsets.fromLTRB(largePadding, smallPadding, largePadding, mediumPadding),
+                padding: EdgeInsets.fromLTRB(
+                    largePadding, smallPadding, largePadding, mediumPadding),
                 decoration: BoxDecoration(),
                 child: TextField(
                   style: theme.textTheme.body1.copyWith(
-                      color: theme.colorScheme.onPrimary,
-                      fontSize: 20),
+                      color: theme.colorScheme.onPrimary, fontSize: 20),
                   controller: _controller,
                   onChanged: model.search,
                   autofocus: true,
@@ -86,30 +101,46 @@ class _DictionarySearchViewState extends State<DictionarySearchView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Expanded(
-                            child: Text(
-                              "CHINESE (" +
-                                  model.chineseSearchResults.length.toString() +
-                                  ')',
-                              style:
-                                  TextStyle(color: theme.colorScheme.onPrimary),
-                            ),
+                            child: GestureDetector(
+                                onTap: () => model.setSearchMode(
+                                    SearchMode.byChineseInDictionary),
+                                child: Text(
+                                  "CHINESE (" +
+                                      model.chineseSearchResults.length
+                                          .toString() +
+                                      ')',
+                                  style: TextStyle(
+                                      color: model.searchMode ==
+                                              SearchMode.byChineseInDictionary
+                                          ? theme.colorScheme.onPrimary
+                                          : theme.colorScheme.primaryVariant),
+                                )),
                           ),
                           Container(
                               alignment: Alignment(1, 0),
                               constraints:
                                   BoxConstraints(minWidth: 112, maxWidth: 112),
-                              child: Text(
-                                "ENGLISH (" + 0.toString() + ')',
-                                style: TextStyle(
-                                    color: theme.colorScheme.onPrimary),
-                              )),
+                              child: GestureDetector(
+                                  onTap: () => model.setSearchMode(
+                                      SearchMode.byEnglishInDictionary),
+                                  child: Text(
+                                    "ENGLISH (" +
+                                        model.englishSearchResults.length
+                                            .toString() +
+                                        ')',
+                                    style: TextStyle(
+                                        color: model.searchMode ==
+                                                SearchMode.byEnglishInDictionary
+                                            ? theme.colorScheme.onPrimary
+                                            : theme.colorScheme.primaryVariant),
+                                  ))),
                         ])),
                 preferredSize: Size.fromHeight(45),
               ),
             ),
           ),
           body: EntryList(
-            entryList: model.chineseSearchResults,
+            entryList: selectResults(model.searchMode),
             intonationMode: preferences.intonationMode,
           ),
         );

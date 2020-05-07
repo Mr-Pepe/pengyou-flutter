@@ -17,6 +17,8 @@ final String columnHsk = 'hsk';
 final String columnWordLength = 'word_length';
 final String columnPinyinLength = 'pinyin_length';
 
+final String tableEntriesFts = 'entriesFts';
+
 final String tablePermutations = 'permutations';
 final String columnPermutation = 'permutation';
 final String columnEntryId = 'entry_id';
@@ -94,6 +96,25 @@ class DBProvider {
           '$columnId IN (SELECT DISTINCT $columnEntryId FROM $tablePermutations WHERE $columnPermutation >= ? AND $columnPermutation < ? LIMIT ?)',
       whereArgs: [lowerString, upperString, MAX_SEARCH_RESULTS],
     );
+
+    if (maps.length > 0) {
+      return [
+        for (var iEntry = 0; iEntry < maps.length; iEntry++)
+          Entry.fromMap(maps[iEntry])
+      ];
+    } else {
+      return <Entry>[];
+    }
+  }
+
+  Future<List<Entry>> searchInDictByEnglish(String query) async {
+    Database db = await database;
+
+    List<Map> maps = await db.rawQuery('SELECT * FROM ' +
+        tableEntries +
+        ' JOIN ' +
+        tableEntriesFts +
+        " ON entries.id == entriesFts.docId WHERE entriesFts.definitions MATCH ?", [query]);
 
     if (maps.length > 0) {
       return [
