@@ -30,31 +30,37 @@ class DictionarySearchViewModel extends ChangeNotifier {
   Future<void> searchChineseInDict(String query) async {
     _chineseResultsSubscription?.cancel();
 
-    _chineseResultsSubscription = _entryRepository.searchForChinese(query).listen((List<Entry> results) {
+    _chineseResultsSubscription =
+        _entryRepository.searchForChinese(query).listen((List<Entry> results) {
       _chineseSearchResults = sortChineseSearchResults(results);
       notifyListeners();
     });
   }
 
   Future<void> searchEnglishInDict(String query) async {
-
     _englishResultsSubscription1?.cancel();
     _englishResultsSubscription2?.cancel();
 
-    _englishResultsSubscription1 = _entryRepository.searchForEnglish(query).asStream().listen((List<Entry> results) {
-      _englishSearchResults = results;
+    _englishResultsSubscription1 = _entryRepository
+        .searchForEnglish(query)
+        .asStream()
+        .listen((List<Entry> results) {
+      _englishSearchResults = sortEnglishSearchResults(results);
       if (_englishSearchResults.isNotEmpty) {
         notifyListeners();
       }
 
-
-      _englishResultsSubscription2 = _entryRepository.searchForEnglish('*' + query + '*').asStream().listen((List<Entry> wildCardResults) {
-        _englishSearchResults.addAll(wildCardResults);
-        _englishSearchResults = LinkedHashSet<Entry>.from(_englishSearchResults).toList();
+      _englishResultsSubscription2 = _entryRepository
+          .searchForEnglish('*' + query + '*')
+          .asStream()
+          .listen((List<Entry> wildCardResults) {
+        _englishSearchResults.addAll(sortEnglishSearchResults(wildCardResults));
+        _englishSearchResults =
+            LinkedHashSet<Entry>.from(_englishSearchResults).toList();
         notifyListeners();
       });
     });
-
+    notifyListeners();
   }
 
   void setSearchMode(int mode) {
@@ -64,28 +70,37 @@ class DictionarySearchViewModel extends ChangeNotifier {
 
   List<Entry> sortChineseSearchResults(List<Entry> results) {
     results.sort((a, b) {
-        final wordLengthComparison = a.wordLength.compareTo(b.wordLength);
-        if (wordLengthComparison != 0) {
-          return wordLengthComparison;
-        }
-        else {
-          final hskComparison = a.hsk.compareTo(b.hsk);
-          if (hskComparison != 0) {
-            return hskComparison;
-          }
-          else {
-            final pinyinLengthComparison = a.pinyinLength.compareTo(b.pinyinLength);
+      final wordLengthComparison = a.wordLength.compareTo(b.wordLength);
+      if (wordLengthComparison != 0) {
+        return wordLengthComparison;
+      } else {
+        final hskComparison = a.hsk.compareTo(b.hsk);
+        if (hskComparison != 0) {
+          return hskComparison;
+        } else {
+          final pinyinLengthComparison =
+              a.pinyinLength.compareTo(b.pinyinLength);
 
-            if (pinyinLengthComparison != 0) {
-              return pinyinLengthComparison;
-            }
-            else {
-              return a.priority.compareTo(b.priority);
-            }
+          if (pinyinLengthComparison != 0) {
+            return pinyinLengthComparison;
+          } else {
+            return a.priority.compareTo(b.priority);
           }
         }
-      });
-    
+      }
+    });
+    return results;
+  }
+
+  List<Entry> sortEnglishSearchResults(List<Entry> results) {
+    results.sort((a, b) {
+        final hskComparison = a.hsk.compareTo(b.hsk);
+        if (hskComparison != 0) {
+          return hskComparison;
+        } else {
+            return a.priority.compareTo(b.priority);
+          }
+    });
     return results;
   }
 }
