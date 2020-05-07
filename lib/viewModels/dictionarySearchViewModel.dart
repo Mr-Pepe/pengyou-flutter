@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/widgets.dart';
 import 'package:pengyou/models/entry.dart';
 import 'package:pengyou/repositories/EntryRepository.dart';
@@ -27,6 +29,15 @@ class DictionarySearchViewModel extends ChangeNotifier {
 
   Future<void> searchEnglishInDict(String query) async {
     _englishSearchResults = await _entryRepository.searchForEnglish(query);
+    if (_englishSearchResults.isNotEmpty) {
+      notifyListeners();
+    }
+
+    final wildCardResults = await _entryRepository.searchForEnglish('*' + query + '*');
+    if (wildCardResults.length < 100) {
+      _englishSearchResults.addAll(wildCardResults);
+      _englishSearchResults = LinkedHashSet<Entry>.from(_englishSearchResults).toList();
+    }
     notifyListeners();
   }
 

@@ -48,4 +48,16 @@ class Entry {
     };
     return map;
   }
+
+  @override
+  bool operator ==(Object other) =>
+  identical(this, other) ||
+  other is Entry &&
+  id == other.id &&
+  simplified == other.simplified &&
+  traditional == other.traditional &&
+  pinyin == other.pinyin;
+
+  @override
+  int get hashCode => id.hashCode ^ simplified.hashCode ^ traditional.hashCode ^ pinyin.hashCode;
 }

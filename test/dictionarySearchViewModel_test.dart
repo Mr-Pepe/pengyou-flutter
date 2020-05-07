@@ -18,9 +18,18 @@ void main() {
       pinyinLength: 4,
       definitions: "to fly");
 
-  test('Search for Chinese', () async {
-    final mockEntryRepository = MockEntryRepository();
-    final model = DictionarySearchViewModel(mockEntryRepository);
+
+  final mockEntryRepository = MockEntryRepository();
+  final model = DictionarySearchViewModel(mockEntryRepository);
+
+  when(mockEntryRepository.searchForChinese("fei"))
+        .thenAnswer((_) async => Future.value([mockEntry]));
+  when(mockEntryRepository.searchForEnglish("fei"))
+        .thenAnswer((_) async => Future.value([mockEntry]));
+  when(mockEntryRepository.searchForEnglish("*fei*"))
+        .thenAnswer((_) async => Future.value([mockEntry, mockEntry]));
+
+  test('Search', () async {
 
     when(mockEntryRepository.searchForChinese("fei"))
         .thenAnswer((_) async => Future.value([mockEntry]));
@@ -28,17 +37,7 @@ void main() {
     await model.search("fei");
 
     expect(model.chineseSearchResults.length, 1);
+    // Duplicates should be removed
+    expect(model.englishSearchResults.length, 1);
   });
-
-  test('Search for English', () async {
-    final mockEntryRepository = MockEntryRepository();
-    final model = DictionarySearchViewModel(mockEntryRepository);
-
-    when(mockEntryRepository.searchForEnglish("yeah"))
-        .thenAnswer((_) async => Future.value([mockEntry]));
-
-    await model.search("fei");
-
-    expect(model.chineseSearchResults.length, 1);
-  })
 }
