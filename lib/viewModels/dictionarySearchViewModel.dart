@@ -31,7 +31,7 @@ class DictionarySearchViewModel extends ChangeNotifier {
     _chineseResultsSubscription?.cancel();
 
     _chineseResultsSubscription = _entryRepository.searchForChinese(query).listen((List<Entry> results) {
-      _chineseSearchResults = results;
+      _chineseSearchResults = sortChineseSearchResults(results);
       notifyListeners();
     });
   }
@@ -60,5 +60,32 @@ class DictionarySearchViewModel extends ChangeNotifier {
   void setSearchMode(int mode) {
     searchMode = mode;
     notifyListeners();
+  }
+
+  List<Entry> sortChineseSearchResults(List<Entry> results) {
+    results.sort((a, b) {
+        final wordLengthComparison = a.wordLength.compareTo(b.wordLength);
+        if (wordLengthComparison != 0) {
+          return wordLengthComparison;
+        }
+        else {
+          final hskComparison = a.hsk.compareTo(b.hsk);
+          if (hskComparison != 0) {
+            return hskComparison;
+          }
+          else {
+            final pinyinLengthComparison = a.pinyinLength.compareTo(b.pinyinLength);
+
+            if (pinyinLengthComparison != 0) {
+              return pinyinLengthComparison;
+            }
+            else {
+              return a.priority.compareTo(b.priority);
+            }
+          }
+        }
+      });
+    
+    return results;
   }
 }
