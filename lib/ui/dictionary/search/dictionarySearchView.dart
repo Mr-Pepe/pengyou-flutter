@@ -15,12 +15,21 @@ class DictionarySearchView extends StatefulWidget {
 }
 
 class _DictionarySearchViewState extends State<DictionarySearchView> {
+  TextEditingController _textController;
+  DictionarySearchViewModel _model;
+
+  @override
+  void initState() {
+    super.initState();
+    _textController = TextEditingController(
+      text: 'ni',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final prefs = Provider.of<AppPreferences>(context);
-
-    var _controller = TextEditingController();
 
     void changeThings(String asd) {
       prefs.setChineseMode(ChineseMode.traditionalSimplified);
@@ -28,12 +37,14 @@ class _DictionarySearchViewState extends State<DictionarySearchView> {
       prefs.setDarkTheme(!prefs.themeIsDark);
     }
 
-    return ChangeNotifierProvider<DictionarySearchViewModel>.value(
-      value: DictionarySearchViewModel(Provider.of(context)),
+    return ChangeNotifierProvider<DictionarySearchViewModel>(
+      create: (_) => _model == null
+          ? DictionarySearchViewModel(Provider.of(context))
+          : _model,
       child: Consumer2<DictionarySearchViewModel, AppPreferences>(
           builder: (context, model, preferences, child) {
-        // model.search('ni');
 
+        _model = model;
 
         List<Entry> selectResults(int searchMode) {
           switch (searchMode) {
@@ -60,7 +71,7 @@ class _DictionarySearchViewState extends State<DictionarySearchView> {
                 child: TextField(
                   style: theme.textTheme.body1.copyWith(
                       color: theme.colorScheme.onPrimary, fontSize: 20),
-                  controller: _controller,
+                  controller: _textController,
                   onChanged: model.search,
                   autofocus: true,
                   cursorColor: theme.colorScheme.onPrimary,
@@ -76,7 +87,7 @@ class _DictionarySearchViewState extends State<DictionarySearchView> {
                             color: theme.colorScheme.onPrimary, width: 2)),
                     contentPadding: EdgeInsets.fromLTRB(0, 16, 0, 0),
                     suffixIcon: IconButton(
-                      onPressed: () => _controller.clear(),
+                      onPressed: () => _textController.clear(),
                       padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
                       alignment: Alignment(1, 0),
                       // iconSize: 24,
@@ -146,5 +157,11 @@ class _DictionarySearchViewState extends State<DictionarySearchView> {
         );
       }),
     );
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
   }
 }
