@@ -1,39 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pengyou/ui/settings/generalAppearanceSettings.dart';
+import 'package:pengyou/values/strings.dart';
 
-class BaseSettings extends StatefulWidget {
-  @override
-  _BaseSettingsState createState() => _BaseSettingsState();
-}
-
-class _BaseSettingsState extends State<BaseSettings> {
-  TextEditingController _textController;
-
-  @override
-  void initState() {
-    super.initState();
-    _textController = TextEditingController(
-      text: 'sample text: asd}',
-    );
-  }
-
+class BaseSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: Text(AppStrings.settings),
       ),
-      body: Container(
-        padding: const EdgeInsets.all(32.0),
-        alignment: Alignment.center,
-        child: TextField(controller: _textController),
+      body: Column(
+        children: <Widget>[
+          ListTile(
+              title: Text(AppStrings.generalAppearance),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => GeneralAppearanceSettings()));
+              }),
+          ListTile(
+            title: Text(AppStrings.strokeOrderAnimationAndQuiz),
+          ),
+          ListTile(
+            title: Text(AppStrings.aboutThisApp),
+          ),
+          _buildDivider(),
+        ],
       ),
     );
   }
 
-  @override
-  void dispose() {
-    _textController.dispose();
-    super.dispose();
+  Divider _buildDivider() {
+    return Divider(
+      height: 0,
+      color: Colors.grey,
+    );
   }
 }
