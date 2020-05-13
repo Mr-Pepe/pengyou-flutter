@@ -5,6 +5,7 @@ import 'package:pengyou/models/entry.dart';
 import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/utils/enumsAndConstants.dart';
 import 'package:pengyou/utils/formatting.dart';
+import 'package:pengyou/values/dimensions.dart';
 import 'package:pengyou/values/strings.dart';
 import 'package:provider/provider.dart';
 
@@ -93,44 +94,46 @@ class _HeadwordFormattingDialogState extends State<HeadwordFormattingDialog> {
           padding: const EdgeInsets.symmetric(vertical: 12),
           child: Center(
               child: Text.rich(formatHeadword(entry, chineseMode, toneColors,
-                  mainFontSize: 20,
+                  mainFontSize: entryCardHeadwordFontSize,
                   alternativeDashed: alternativeDashed,
                   alternativeScalingFactor: alternativeScalingFactor))),
         ),
         children: <Widget>[
           ListTile(
-            title: DropdownButton(
-              items: [
-                DropdownMenuItem(
-                  child: Text(AppStrings.simplified),
-                  value: AppStrings.simplified,
-                ),
-                DropdownMenuItem(
-                  child: Text(AppStrings.traditional),
-                  value: AppStrings.traditional,
-                )
-              ],
-              value: chineseMode == ChineseMode.simplified ||
-                      chineseMode == ChineseMode.simplifiedTraditional
-                  ? AppStrings.simplified
-                  : AppStrings.traditional,
-              onChanged: (value) {
-                setState(() {
-                  switch (value) {
-                    case AppStrings.simplified:
-                      chineseMode = showAlternative
-                          ? ChineseMode.simplifiedTraditional
-                          : ChineseMode.simplified;
-                      break;
-                    case AppStrings.traditional:
-                      chineseMode = showAlternative
-                          ? ChineseMode.traditionalSimplified
-                          : ChineseMode.traditional;
-                      break;
-                    default:
-                  }
-                });
-              },
+            title: DropdownButtonHideUnderline(
+              child: DropdownButton(
+                items: [
+                  DropdownMenuItem(
+                    child: Text(AppStrings.simplified),
+                    value: AppStrings.simplified,
+                  ),
+                  DropdownMenuItem(
+                    child: Text(AppStrings.traditional),
+                    value: AppStrings.traditional,
+                  )
+                ],
+                value: chineseMode == ChineseMode.simplified ||
+                        chineseMode == ChineseMode.simplifiedTraditional
+                    ? AppStrings.simplified
+                    : AppStrings.traditional,
+                onChanged: (value) {
+                  setState(() {
+                    switch (value) {
+                      case AppStrings.simplified:
+                        chineseMode = showAlternative
+                            ? ChineseMode.simplifiedTraditional
+                            : ChineseMode.simplified;
+                        break;
+                      case AppStrings.traditional:
+                        chineseMode = showAlternative
+                            ? ChineseMode.traditionalSimplified
+                            : ChineseMode.traditional;
+                        break;
+                      default:
+                    }
+                  });
+                },
+              ),
             ),
           ),
           SwitchListTile(
@@ -141,6 +144,8 @@ class _HeadwordFormattingDialogState extends State<HeadwordFormattingDialog> {
                 : false,
             onChanged: (val) {
               setState(() {
+                showAlternative = val;
+
                 if (val == true) {
                   chineseMode = chineseMode == ChineseMode.simplified
                       ? ChineseMode.simplifiedTraditional
@@ -153,24 +158,45 @@ class _HeadwordFormattingDialogState extends State<HeadwordFormattingDialog> {
               });
             },
           ),
+          if (showAlternative)
+            SwitchListTile(
+                title: Text(AppStrings.usePlaceholders),
+                value: alternativeDashed ? true : false,
+                onChanged: (val) {
+                  setState(() {
+                    alternativeDashed = val;
+                  });
+                })
+          else
+            // Omit the onChanged callback to deactivate the switch
+            SwitchListTile(
+              title: Text(AppStrings.usePlaceholders),
+              value: alternativeDashed ? true : false,
+              onChanged: null,
+            ),
           Padding(
             padding: const EdgeInsets.only(top: 8),
-            child: Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-              MaterialButton(
-                elevation: 5,
-                child: Text(AppStrings.cancel),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              MaterialButton(
-                elevation: 5,
-                child: Text(AppStrings.submit),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ]),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  MaterialButton(
+                    elevation: 5,
+                    child: Text(AppStrings.cancel),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  MaterialButton(
+                    elevation: 5,
+                    child: Text(AppStrings.submit),
+                    onPressed: () {
+                      prefs.setChineseMode(chineseMode);
+                      prefs.setAlternativeDashed(alternativeDashed);
+                      prefs.setAlternativeHeadwordScalingFactor(alternativeScalingFactor);
+                      Navigator.pop(context);
+                    },
+                  ),
+                ]),
           ),
         ]);
   }

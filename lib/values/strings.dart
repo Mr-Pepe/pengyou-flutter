@@ -13,6 +13,7 @@ class AppStrings {
       static const String simplified = "Simplified";
       static const String traditional = "Traditional";
       static const String showAlternative = "Show alternative";
+      static const String usePlaceholders = "Placeholders";
     static const String intonationMode = "Intonation";
       static const String pinyinMarks = "Pinyin with marks";
       static const String pinyinNumbers = "Pinyin with numbers";
