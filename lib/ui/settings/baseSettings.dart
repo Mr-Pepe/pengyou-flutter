@@ -15,8 +15,7 @@ class BaseSettings extends StatelessWidget {
           ListTile(
               title: Text(AppStrings.generalAppearance),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => GeneralAppearanceSettings()));
+                Navigator.pushNamed(context, '/generalAppearanceSettings');
               }),
           ListTile(
             title: Text(AppStrings.strokeOrderAnimationAndQuiz),

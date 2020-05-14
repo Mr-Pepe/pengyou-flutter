@@ -4,6 +4,7 @@ import 'package:pengyou/drawables/custom_icons_icons.dart';
 import 'package:pengyou/repositories/EntryRepository.dart';
 import 'package:pengyou/ui/dictionary/search/dictionarySearchView.dart';
 import 'package:pengyou/ui/settings/baseSettings.dart';
+import 'package:pengyou/ui/settings/settingsNavigator.dart';
 import 'package:pengyou/values/strings.dart';
 import 'package:pengyou/viewModels/dictionarySearchViewModel.dart';
 import 'package:provider/provider.dart';
@@ -46,7 +47,7 @@ class HomeViewState extends State<HomeView> {
           index: _selectedIndex,
           children: <Widget>[
             DictionarySearchView(),
-            BaseSettings(),
+            SettingsNavigator(),
           ],
         ),
       ),
