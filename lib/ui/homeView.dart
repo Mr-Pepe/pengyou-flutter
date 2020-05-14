@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pengyou/drawables/custom_icons_icons.dart';
-import 'package:pengyou/repositories/EntryRepository.dart';
 import 'package:pengyou/ui/dictionary/search/dictionarySearchView.dart';
-import 'package:pengyou/ui/settings/baseSettings.dart';
 import 'package:pengyou/ui/settings/settingsNavigator.dart';
 import 'package:pengyou/values/strings.dart';
 import 'package:pengyou/viewModels/dictionarySearchViewModel.dart';
-import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
   @override
   HomeViewState createState() => HomeViewState();
 }
-
-GlobalKey<NavigatorState> _pageNavigatorKey = GlobalKey<NavigatorState>();
 
 class HomeViewState extends State<HomeView> {
   int _selectedIndex = 0;

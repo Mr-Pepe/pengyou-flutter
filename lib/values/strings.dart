@@ -14,11 +14,11 @@ class AppStrings {
       static const String traditional = "Traditional";
       static const String showAlternative = "Show alternative";
       static const String usePlaceholders = "Placeholders";
+      static const String alternativeScaling = "Alternative scaling";
     static const String intonationMode = "Intonation";
       static const String pinyinMarks = "Pinyin with marks";
       static const String pinyinNumbers = "Pinyin with numbers";
     static const String headwordColoring = "Headword coloring";
   static const String strokeOrderAnimationAndQuiz = "Stroke order animation and quiz";
   static const String aboutThisApp = "About this app";
-  
 }
