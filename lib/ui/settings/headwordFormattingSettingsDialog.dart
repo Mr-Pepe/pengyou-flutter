@@ -37,113 +37,141 @@ class _HeadwordFormattingSettingsDialogState
           chineseMode == ChineseMode.traditionalSimplified;
     }
 
-    return SimpleDialog(
-        title: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Center(
-              child: Text.rich(formatHeadword(entry, chineseMode, toneColors,
-                  mainFontSize: entryCardHeadwordFontSize,
-                  alternativeDashed: alternativeDashed,
-                  alternativeScalingFactor: alternativeScalingFactor))),
-        ),
-        children: <Widget>[
-          ListTile(
-            title: DropdownButtonHideUnderline(
-              child: DropdownButton(
-                items: [
-                  DropdownMenuItem(
-                    child: Text(AppStrings.simplified),
-                    value: AppStrings.simplified,
-                  ),
-                  DropdownMenuItem(
-                    child: Text(AppStrings.traditional),
-                    value: AppStrings.traditional,
-                  )
-                ],
-                value: chineseMode == ChineseMode.simplified ||
-                        chineseMode == ChineseMode.simplifiedTraditional
-                    ? AppStrings.simplified
-                    : AppStrings.traditional,
-                onChanged: (value) {
-                  setState(() {
-                    switch (value) {
-                      case AppStrings.simplified:
-                        chineseMode = showAlternative
-                            ? ChineseMode.simplifiedTraditional
-                            : ChineseMode.simplified;
-                        break;
-                      case AppStrings.traditional:
-                        chineseMode = showAlternative
-                            ? ChineseMode.traditionalSimplified
-                            : ChineseMode.traditional;
-                        break;
-                      default:
-                    }
-                  });
-                },
-              ),
-            ),
-          ),
-          SwitchListTile(
-            title: Text(AppStrings.showAlternative),
-            value: (chineseMode == ChineseMode.simplifiedTraditional ||
-                    chineseMode == ChineseMode.traditionalSimplified)
-                ? true
-                : false,
-            onChanged: (val) {
-              setState(() {
-                showAlternative = val;
+    final theme = Theme.of(context);
 
-                if (val == true) {
-                  chineseMode = chineseMode == ChineseMode.simplified
-                      ? ChineseMode.simplifiedTraditional
-                      : ChineseMode.traditionalSimplified;
-                } else {
-                  chineseMode = chineseMode == ChineseMode.traditionalSimplified
-                      ? ChineseMode.traditional
-                      : ChineseMode.simplified;
-                }
-              });
-            },
-          ),
-          if (showAlternative == true) ...[
-            SwitchListTile(
-                title: Text(AppStrings.usePlaceholders),
-                value: alternativeDashed ? true : false,
-                onChanged: (val) {
-                  setState(() {
-                    alternativeDashed = val;
-                  });
-                }),
-            ListTile(
-              title: Text(AppStrings.alternativeScaling),
+    return SimpleDialog(
+      title: Center(
+          child: Text.rich(formatHeadword(entry, chineseMode, toneColors,
+              mainFontSize: 20,
+              alternativeDashed: alternativeDashed,
+              alternativeScalingFactor: alternativeScalingFactor))),
+      children: <Widget>[
+        ListTile(
+          contentPadding: EdgeInsets.fromLTRB(
+              materialStandardPadding, 0, materialStandardPadding + 6, 0),
+          title: DropdownButtonHideUnderline(
+            child: DropdownButton(
+              items: [
+                DropdownMenuItem(
+                  child: Text(AppStrings.simplified),
+                  value: AppStrings.simplified,
+                ),
+                DropdownMenuItem(
+                  child: Text(AppStrings.traditional),
+                  value: AppStrings.traditional,
+                )
+              ],
+              value: chineseMode == ChineseMode.simplified ||
+                      chineseMode == ChineseMode.simplifiedTraditional
+                  ? AppStrings.simplified
+                  : AppStrings.traditional,
+              onChanged: (value) {
+                setState(() {
+                  switch (value) {
+                    case AppStrings.simplified:
+                      chineseMode = showAlternative
+                          ? ChineseMode.simplifiedTraditional
+                          : ChineseMode.simplified;
+                      break;
+                    case AppStrings.traditional:
+                      chineseMode = showAlternative
+                          ? ChineseMode.traditionalSimplified
+                          : ChineseMode.traditional;
+                      break;
+                    default:
+                  }
+                });
+              },
             ),
-          ],
-          Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  MaterialButton(
-                    elevation: 5,
-                    child: Text(AppStrings.cancel),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  MaterialButton(
-                    elevation: 5,
-                    child: Text(AppStrings.submit),
-                    onPressed: () {
-                      prefs.setChineseMode(chineseMode);
-                      prefs.setAlternativeDashed(alternativeDashed);
-                      prefs.setAlternativeHeadwordScalingFactor(
-                          alternativeScalingFactor);
-                      Navigator.pop(context);
-                    },
-                  ),
-                ]),
           ),
-        ]);
+        ),
+        SwitchListTile(
+          title: Text(AppStrings.showAlternative),
+          value: (chineseMode == ChineseMode.simplifiedTraditional ||
+                  chineseMode == ChineseMode.traditionalSimplified)
+              ? true
+              : false,
+          onChanged: (val) {
+            setState(() {
+              showAlternative = val;
+
+              if (val == true) {
+                chineseMode = chineseMode == ChineseMode.simplified
+                    ? ChineseMode.simplifiedTraditional
+                    : ChineseMode.traditionalSimplified;
+              } else {
+                chineseMode = chineseMode == ChineseMode.traditionalSimplified
+                    ? ChineseMode.traditional
+                    : ChineseMode.simplified;
+              }
+            });
+          },
+        ),
+        if (showAlternative == true) ...[
+          SwitchListTile(
+              title: Text(AppStrings.usePlaceholders),
+              value: alternativeDashed ? true : false,
+              onChanged: (val) {
+                setState(() {
+                  alternativeDashed = val;
+                });
+              }),
+          ListTile(
+            contentPadding: EdgeInsets.fromLTRB(
+                materialStandardPadding, 0, materialStandardPadding - 3, 0),
+            title: Row(
+              children: <Widget>[
+                Text(AppStrings.alternativeScaling),
+                Expanded(
+                  child: Slider(
+                    min: 0.3,
+                    max: 1.0,
+                    value: alternativeScalingFactor,
+                    onChanged: (val) {
+                      setState(
+                        () {
+                          alternativeScalingFactor = val;
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+        Padding(
+          padding:
+              const EdgeInsets.fromLTRB(0, 8, materialStandardPadding - 6, 0),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+            MaterialButton(
+              elevation: 5,
+              child: Text(
+                AppStrings.cancel,
+                style: TextStyle(color: theme.highlightColor),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            MaterialButton(
+              elevation: 5,
+              child: Text(
+                AppStrings.submit,
+                style: TextStyle(color: theme.highlightColor),
+              ),
+              onPressed: () {
+                prefs.setChineseMode(chineseMode);
+                prefs.setAlternativeDashed(alternativeDashed);
+                prefs.setAlternativeHeadwordScalingFactor(
+                    alternativeScalingFactor);
+                Navigator.pop(context);
+              },
+            ),
+          ]),
+        ),
+      ],
+    );
   }
 }

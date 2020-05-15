@@ -82,7 +82,7 @@ class _DictionarySearchViewState extends State<DictionarySearchView> {
                       focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
                               color: theme.colorScheme.onPrimary, width: 2)),
-                      contentPadding: EdgeInsets.fromLTRB(0, 16, 0, 0),
+                      contentPadding: EdgeInsets.fromLTRB(0, materialStandardPadding, 0, 0),
                       suffixIcon: IconButton(
                         onPressed: () => _textController.clear(),
                         padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -101,8 +101,8 @@ class _DictionarySearchViewState extends State<DictionarySearchView> {
                   color: theme.colorScheme.primary,
                 ),
                 child: Container(
-                  margin: EdgeInsets.fromLTRB(largePadding + 16, smallPadding,
-                      largePadding + 16, mediumPadding),
+                  margin: EdgeInsets.fromLTRB(materialStandardPadding + largePadding, smallPadding,
+                      materialStandardPadding + largePadding, mediumPadding),
                   padding: EdgeInsets.fromLTRB(mediumPadding + 5, tinyPadding,
                       mediumPadding + 5, tinyPadding),
                   decoration: BoxDecoration(
