@@ -16,9 +16,8 @@ class EntryList extends StatefulWidget {
 class EntryListState extends State<EntryList> {
   @override
   Widget build(BuildContext context) {
-    // final theme = Theme.of(context);
-
     return ListView.separated(
+        padding: EdgeInsets.all(0),
         itemCount: widget.entryList.length,
         itemBuilder: (BuildContext context, int index) {
           return EntryCard(widget.entryList[index]);

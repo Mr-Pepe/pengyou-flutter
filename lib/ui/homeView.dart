@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pengyou/drawables/custom_icons_icons.dart';
-import 'package:pengyou/ui/dictionary/search/dictionarySearchView.dart';
+import 'package:pengyou/ui/dictionary/dictionaryNavigator.dart';
 import 'package:pengyou/ui/settings/settingsNavigator.dart';
 import 'package:pengyou/values/strings.dart';
 import 'package:pengyou/viewModels/dictionarySearchViewModel.dart';
@@ -41,7 +41,7 @@ class HomeViewState extends State<HomeView> {
         child: IndexedStack(
           index: _selectedIndex,
           children: <Widget>[
-            DictionarySearchView(),
+            DictionaryNavigator(),
             SettingsNavigator(),
           ],
         ),

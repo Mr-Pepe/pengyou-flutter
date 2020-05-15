@@ -12,34 +12,36 @@ class GeneralAppearanceSettings extends StatelessWidget {
     final prefs = Provider.of<AppPreferences>(context);
     final theme = Theme.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppStrings.generalAppearance),
-      ),
-      body: Column(
-        children: <Widget>[
-          SwitchListTile(
-            value: prefs.themeIsDark ? true : false,
-            title: Text(AppStrings.theme),
-            onChanged: (val) => prefs.setDarkTheme(val),
-          ),
-          ListTile(
-            title: Text(AppStrings.chineseMode),
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return HeadwordFormattingSettingsDialog();
-                  });
-            },
-          ),
-          ListTile(
-            title: Text(AppStrings.intonationMode),
-            subtitle: Text(getIntonationModeString(prefs.intonationMode)),
-            onTap: () {},
-          ),
-        ],
-      ),
+    return Column(
+      children: <Widget>[
+        AppBar(
+          title: Text(AppStrings.generalAppearance),
+        ),
+        Column(
+          children: <Widget>[
+            SwitchListTile(
+              value: prefs.themeIsDark ? true : false,
+              title: Text(AppStrings.theme),
+              onChanged: (val) => prefs.setDarkTheme(val),
+            ),
+            ListTile(
+              title: Text(AppStrings.chineseMode),
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return HeadwordFormattingSettingsDialog();
+                    });
+              },
+            ),
+            ListTile(
+              title: Text(AppStrings.intonationMode),
+              subtitle: Text(getIntonationModeString(prefs.intonationMode)),
+              onTap: () {},
+            ),
+          ],
+        ),
+      ],
     );
   }
 

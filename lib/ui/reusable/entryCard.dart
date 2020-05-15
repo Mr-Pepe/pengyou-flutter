@@ -38,7 +38,7 @@ class EntryCard extends StatelessWidget {
       elevation: 0,
       child: Padding(
         padding: EdgeInsets.fromLTRB(
-            mediumPadding, smallPadding, mediumPadding, smallPadding),
+            mediumPadding, tinyPadding, mediumPadding, tinyPadding),
         child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -66,7 +66,7 @@ class EntryCard extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.fromLTRB(0, mediumPadding-2, 0, 0),
+                padding: EdgeInsets.only(top: mediumPadding-2),
                 child: (entry.hsk != 7 && prefs.showHskLabels)
                     ? Text.rich(TextSpan(
                         text: 'HSK ' + entry.hsk.toString(),

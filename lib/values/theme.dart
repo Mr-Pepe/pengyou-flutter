@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/values/colors.dart';
 
 class AppTheme {
@@ -11,7 +10,7 @@ class AppTheme {
   ThemeData get themeData {
     /// Create a TextTheme and ColorScheme, that we can use to generate ThemeData
     TextTheme textTheme =
-        (isDark ? ThemeData.dark() : ThemeData.light()).textTheme.copyWith(body1: TextStyle(fontFamily: 'SourceSansPro')
+        (isDark ? ThemeData.dark() : ThemeData.light()).textTheme.copyWith(bodyText2: TextStyle(fontFamily: 'SourceSansPro')
         );
 
     ColorScheme colorScheme = ColorScheme(
