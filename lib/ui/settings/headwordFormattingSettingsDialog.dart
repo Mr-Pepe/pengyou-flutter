@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:pengyou/models/entry.dart';
 import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/utils/enumsAndConstants.dart';
@@ -36,6 +37,8 @@ class _HeadwordFormattingSettingsDialogState
       showAlternative = chineseMode == ChineseMode.simplifiedTraditional ||
           chineseMode == ChineseMode.traditionalSimplified;
     }
+
+    Color colorPickerColor = Colors.white;
 
     final theme = Theme.of(context);
 
@@ -140,6 +143,153 @@ class _HeadwordFormattingSettingsDialogState
             ),
           ),
         ],
+        ListTile(
+          contentPadding: EdgeInsets.fromLTRB(materialStandardPadding, 0, materialStandardPadding+10, 0),
+          title: Row(
+            children: <Widget>[
+              // Tone 1
+              Expanded(
+                child: RawMaterialButton(
+                  constraints: BoxConstraints(minWidth: 0, minHeight: 36.0),
+                  child: Text(''),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        Color pickerColor = toneColors[0];
+
+                        return ToneColorPicker(
+                          pickerColor: pickerColor,
+                        );
+                      },
+                    ).then((val) {
+                      if (val != null) {
+                        setState(() {
+                          toneColors[0] = val;
+                        });
+                      }
+                    });
+                  },
+                  shape: CircleBorder(
+                      side: BorderSide(color: theme.colorScheme.onBackground)),
+                  fillColor: toneColors[0],
+                ),
+              ),
+              Spacer(),
+              // Tone 2
+              Expanded(
+                child: RawMaterialButton(
+                  child: Text(''),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        Color pickerColor = toneColors[1];
+
+                        return ToneColorPicker(
+                          pickerColor: pickerColor,
+                        );
+                      },
+                    ).then((val) {
+                      if (val != null) {
+                        setState(() {
+                          toneColors[1] = val;
+                        });
+                      }
+                    });
+                  },
+                  shape: CircleBorder(
+                      side: BorderSide(color: theme.colorScheme.onBackground)),
+                  fillColor: toneColors[1],
+                ),
+              ),
+              Spacer(),
+              // Tone 3
+              Expanded(
+                child: RawMaterialButton(
+                  child: Text(''),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        Color pickerColor = toneColors[2];
+
+                        return ToneColorPicker(
+                          pickerColor: pickerColor,
+                        );
+                      },
+                    ).then((val) {
+                      if (val != null) {
+                        setState(() {
+                          toneColors[2] = val;
+                        });
+                      }
+                    });
+                  },
+                  shape: CircleBorder(
+                      side: BorderSide(color: theme.colorScheme.onBackground)),
+                  fillColor: toneColors[2],
+                ),
+              ),
+              Spacer(),
+              // Tone 4
+              Expanded(
+                child: RawMaterialButton(
+                  child: Text(''),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        Color pickerColor = toneColors[3];
+
+                        return ToneColorPicker(
+                          pickerColor: pickerColor,
+                        );
+                      },
+                    ).then((val) {
+                      if (val != null) {
+                        setState(() {
+                          toneColors[3] = val;
+                        });
+                      }
+                    });
+                  },
+                  shape: CircleBorder(
+                      side: BorderSide(color: theme.colorScheme.onBackground)),
+                  fillColor: toneColors[3],
+                ),
+              ),
+              Spacer(),
+              // Tone 5
+              Expanded(
+                child: RawMaterialButton(
+                  child: Text(''),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        Color pickerColor = toneColors[4];
+
+                        return ToneColorPicker(
+                          pickerColor: pickerColor,
+                        );
+                      },
+                    ).then((val) {
+                      if (val != null) {
+                        setState(() {
+                          toneColors[4] = val;
+                        });
+                      }
+                    });
+                  },
+                  shape: CircleBorder(
+                      side: BorderSide(color: theme.colorScheme.onBackground)),
+                  fillColor: toneColors[4],
+                ),
+              ),
+            ],
+          ),
+        ),
         Padding(
           padding:
               const EdgeInsets.fromLTRB(0, 8, materialStandardPadding - 6, 0),
@@ -170,6 +320,56 @@ class _HeadwordFormattingSettingsDialogState
               },
             ),
           ]),
+        ),
+      ],
+    );
+  }
+}
+
+class ToneColorPicker extends StatefulWidget {
+  final Color pickerColor;
+
+  ToneColorPicker({this.pickerColor});
+
+  @override
+  _ToneColorPickerState createState() => _ToneColorPickerState();
+}
+
+class _ToneColorPickerState extends State<ToneColorPicker> {
+  Color pickerColor;
+
+  @override
+  Widget build(BuildContext context) {
+    if (pickerColor == null) {
+      pickerColor = widget.pickerColor;
+    }
+    return AlertDialog(
+      content: StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return ColorPicker(
+            pickerColor: pickerColor,
+            onColorChanged: (newColor) {
+              setState(
+                () {
+                  pickerColor = newColor;
+                },
+              );
+            },
+          );
+        },
+      ),
+      actions: <Widget>[
+        FlatButton(
+          child: Text(AppStrings.cancel),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        FlatButton(
+          child: Text(AppStrings.submit),
+          onPressed: () {
+            Navigator.pop(context, pickerColor);
+          },
         ),
       ],
     );
