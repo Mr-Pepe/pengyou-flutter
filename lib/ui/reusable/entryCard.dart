@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pengyou/models/entry.dart';
 import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/utils/formatting.dart';
+import 'package:pengyou/utils/utils.dart';
 import 'package:pengyou/values/dimensions.dart';
 import 'package:pengyou/values/strings.dart';
 import 'package:provider/provider.dart';
@@ -40,42 +41,43 @@ class EntryCard extends StatelessWidget {
     }
 
     return ListTile(
-      title: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text.rich(
-                    formatHeadword(
-                        entry, prefs.chineseMode, prefs.getToneColors(),
-                        mainFontSize: entryCardHeadwordFontSize,
-                        alternativeScalingFactor:
-                            prefs.alternativeHeadwordScalingFactor),
-                    textAlign: TextAlign.start,
-                  ),
-                  Text(
-                    formatIntonation(entry.pinyin, prefs.intonationMode),
-                    style: TextStyle(fontSize: entryCardPinyinFontSize),
-                  ),
-                  Text.rich(
-                    definitions,
-                    maxLines: 3,
-                    style: TextStyle(fontSize: 14),
-                  ),
-                ],
+      onLongPress: () {
+        copyHeadwordToClipboard(entry, prefs.chineseMode);
+      },
+      title:
+          Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text.rich(
+                formatHeadword(entry, prefs.chineseMode, prefs.getToneColors(),
+                    mainFontSize: entryCardHeadwordFontSize,
+                    alternativeScalingFactor:
+                        prefs.alternativeHeadwordScalingFactor),
+                textAlign: TextAlign.start,
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: smallPadding),
-              child: (entry.hsk != 7 && prefs.showHskLabels)
-                  ? Text.rich(TextSpan(
-                      text: 'HSK ' + entry.hsk.toString(),
-                      style: TextStyle(decoration: TextDecoration.underline)))
-                  : Text.rich(TextSpan(text: '         ')),
-            )
-          ]),
+              Text(
+                formatIntonation(entry.pinyin, prefs.intonationMode),
+                style: TextStyle(fontSize: entryCardPinyinFontSize),
+              ),
+              Text.rich(
+                definitions,
+                maxLines: 3,
+                style: TextStyle(fontSize: 14),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: smallPadding),
+          child: (entry.hsk != 7 && prefs.showHskLabels)
+              ? Text.rich(TextSpan(
+                  text: 'HSK ' + entry.hsk.toString(),
+                  style: TextStyle(decoration: TextDecoration.underline)))
+              : Text.rich(TextSpan(text: '         ')),
+        )
+      ]),
     );
   }
 }
