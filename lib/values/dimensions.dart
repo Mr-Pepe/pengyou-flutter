@@ -8,3 +8,7 @@ const double materialStandardPadding = 16;
 
 const double entryCardHeadwordFontSize = 26;
 const double entryCardPinyinFontSize = 18;
+
+const double wordViewHeadwordFontSize = 30;
+const double wordViewPinyinFontSize = 24;
+const double wordViewHskFontSize = 20;

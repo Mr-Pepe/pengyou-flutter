@@ -44,6 +44,9 @@ class EntryCard extends StatelessWidget {
       onLongPress: () {
         copyHeadwordToClipboard(entry, prefs.chineseMode);
       },
+      onTap: () {
+        Navigator.pushNamed(context, '/wordView', arguments: entry);
+      },
       title:
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
         Expanded(

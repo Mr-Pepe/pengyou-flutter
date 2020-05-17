@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pengyou/ui/dictionary/search/dictionarySearchView.dart';
+import 'package:pengyou/ui/dictionary/wordView/wordView.dart';
 
 GlobalKey<NavigatorState> dictionaryNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -20,6 +21,8 @@ class _DictionaryNavigatorState extends State<DictionaryNavigator> {
               switch (settings.name) {
                 case '/':
                   return DictionarySearchView();
+                case '/wordView':
+                  return WordView(settings.arguments);
               }
             });
       },
