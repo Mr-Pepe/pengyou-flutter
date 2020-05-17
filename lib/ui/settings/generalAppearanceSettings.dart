@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pengyou/ui/settings/headwordFormattingSettingsDialog.dart';
+import 'package:pengyou/ui/settings/intonationFormattingSettingsDialog.dart';
 import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/utils/enumsAndConstants.dart';
 import 'package:pengyou/values/strings.dart';
@@ -25,7 +26,8 @@ class GeneralAppearanceSettings extends StatelessWidget {
               onChanged: (val) => prefs.setDarkTheme(val),
             ),
             ListTile(
-              title: Text(AppStrings.chineseMode),
+              title: Text(AppStrings.headwords),
+              subtitle: Text(AppStrings.headwordsSubTitle),
               onTap: () {
                 showDialog(
                     context: context,
@@ -37,7 +39,13 @@ class GeneralAppearanceSettings extends StatelessWidget {
             ListTile(
               title: Text(AppStrings.intonationMode),
               subtitle: Text(getIntonationModeString(prefs.intonationMode)),
-              onTap: () {},
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return IntonationFormattingSettingsDialog();
+                    });
+              },
             ),
           ],
         ),

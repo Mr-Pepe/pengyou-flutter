@@ -9,7 +9,8 @@ class AppStrings {
   static const String settings = "Settings";
   static const String generalAppearance = "General appearance";
     static const String theme = "Dark mode";
-    static const String chineseMode = "Headwords";
+    static const String headwords = "Headwords";
+      static const String headwordsSubTitle = "Simplified/traditional and coloring";
       static const String simplified = "Simplified";
       static const String traditional = "Traditional";
       static const String showAlternative = "Show alternative";
