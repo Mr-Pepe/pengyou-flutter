@@ -4,6 +4,7 @@ import 'package:pengyou/models/entry.dart';
 import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/utils/enumsAndConstants.dart';
 import 'package:pengyou/utils/formatting.dart';
+import 'package:pengyou/values/colors.dart';
 import 'package:pengyou/values/dimensions.dart';
 import 'package:pengyou/values/strings.dart';
 import 'package:provider/provider.dart';
@@ -37,8 +38,6 @@ class _HeadwordFormattingSettingsDialogState
       showAlternative = chineseMode == ChineseMode.simplifiedTraditional ||
           chineseMode == ChineseMode.traditionalSimplified;
     }
-
-    Color colorPickerColor = Colors.white;
 
     final theme = Theme.of(context);
 
@@ -144,7 +143,8 @@ class _HeadwordFormattingSettingsDialogState
           ),
         ],
         ListTile(
-          contentPadding: EdgeInsets.fromLTRB(materialStandardPadding, 0, materialStandardPadding+10, 0),
+          contentPadding: EdgeInsets.fromLTRB(
+              materialStandardPadding, 0, materialStandardPadding, 0),
           title: Row(
             children: <Widget>[
               // Tone 1
@@ -287,6 +287,21 @@ class _HeadwordFormattingSettingsDialogState
                   fillColor: toneColors[4],
                 ),
               ),
+              Spacer(),
+              IconButton(
+                icon: Icon(Icons.undo),
+                onPressed: () {
+                  setState(() {
+                    toneColors = [
+                      tone1DefaultColor,
+                      tone2DefaultColor,
+                      tone3DefaultColor,
+                      tone4DefaultColor,
+                      tone5DefaultColor,
+                    ];
+                  });
+                },
+              )
             ],
           ),
         ),
@@ -316,6 +331,7 @@ class _HeadwordFormattingSettingsDialogState
                 prefs.setAlternativeDashed(alternativeDashed);
                 prefs.setAlternativeHeadwordScalingFactor(
                     alternativeScalingFactor);
+                prefs.setToneColors(toneColors);
                 Navigator.pop(context);
               },
             ),

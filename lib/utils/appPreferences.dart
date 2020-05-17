@@ -87,6 +87,17 @@ class AppPreferences with ChangeNotifier {
     notifyListeners();
   }
 
+  void setToneColors(List<Color> toneColors) {
+    if (toneColors.length == 5) {
+      _prefs.setInt(TONE1_COLOR, toneColors[0].value);
+      _prefs.setInt(TONE2_COLOR, toneColors[1].value);
+      _prefs.setInt(TONE3_COLOR, toneColors[2].value);
+      _prefs.setInt(TONE4_COLOR, toneColors[3].value);
+      _prefs.setInt(TONE5_COLOR, toneColors[4].value);
+    }
+    notifyListeners();
+  }
+
   int get chineseMode => _prefs.getInt(CHINESE_MODE);
   double get alternativeHeadwordScalingFactor =>
       _prefs.getDouble(ALTERNATIVE_HEADWORD_SCALING_FACTOR);
