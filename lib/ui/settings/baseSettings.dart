@@ -18,9 +18,6 @@ class BaseSettings extends StatelessWidget {
                   Navigator.pushNamed(context, '/generalAppearanceSettings');
                 }),
             ListTile(
-              title: Text(AppStrings.strokeOrderAnimationAndQuiz),
-            ),
-            ListTile(
               title: Text(AppStrings.aboutThisApp),
             ),
             _buildDivider(),
