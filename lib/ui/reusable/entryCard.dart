@@ -16,16 +16,22 @@ class EntryCard extends StatelessWidget {
     final theme = Theme.of(context);
     final prefs = Provider.of<AppPreferences>(context);
 
-    final formattedDefinitions = formatDefinitions(entry.definitions, prefs.chineseMode, prefs.intonationMode);
+    final formattedDefinitions = formatDefinitions(
+        entry.definitions, prefs.chineseMode, prefs.intonationMode);
 
     TextSpan definitions = TextSpan(children: []);
 
     if (formattedDefinitions.isEmpty) {
-      definitions = TextSpan(text: AppStrings.noDefinitionFound, style: TextStyle(fontStyle: FontStyle.italic));
-    }
-    else {
-      for (var iDefinition = 0; iDefinition < formattedDefinitions.length; iDefinition++) {
-        definitions.children.add(TextSpan(text: (iDefinition + 1).toString() + ' ', style: TextStyle(fontWeight: FontWeight.bold)));
+      definitions = TextSpan(
+          text: AppStrings.noDefinitionFound,
+          style: TextStyle(fontStyle: FontStyle.italic));
+    } else {
+      for (var iDefinition = 0;
+          iDefinition < formattedDefinitions.length;
+          iDefinition++) {
+        definitions.children.add(TextSpan(
+            text: (iDefinition + 1).toString() + ' ',
+            style: TextStyle(fontWeight: FontWeight.bold)));
         definitions.children.add(formattedDefinitions[iDefinition]);
         if (iDefinition < formattedDefinitions.length - 1) {
           definitions.children.add(TextSpan(text: ' '));
@@ -33,48 +39,43 @@ class EntryCard extends StatelessWidget {
       }
     }
 
-    return Card(
-      color: theme.backgroundColor,
-      elevation: 0,
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(
-            mediumPadding, tinyPadding, mediumPadding, tinyPadding),
-        child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text.rich(
-                      formatHeadword(
-                          entry, prefs.chineseMode, prefs.getToneColors(),
-                          mainFontSize: entryCardHeadwordFontSize,
-                          alternativeScalingFactor:
-                              prefs.alternativeHeadwordScalingFactor),
-                      textAlign: TextAlign.start,
-                    ),
-                    Text(
-                      formatIntonation(entry.pinyin, prefs.intonationMode),
-                      style: TextStyle(fontSize: entryCardPinyinFontSize),
-                    ),
-                    Text.rich(
-                      definitions,
-                      maxLines: 3,
-                    ),
-                  ],
-                ),
+    return ListTile(
+      title: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text.rich(
+                    formatHeadword(
+                        entry, prefs.chineseMode, prefs.getToneColors(),
+                        mainFontSize: entryCardHeadwordFontSize,
+                        alternativeScalingFactor:
+                            prefs.alternativeHeadwordScalingFactor),
+                    textAlign: TextAlign.start,
+                  ),
+                  Text(
+                    formatIntonation(entry.pinyin, prefs.intonationMode),
+                    style: TextStyle(fontSize: entryCardPinyinFontSize),
+                  ),
+                  Text.rich(
+                    definitions,
+                    maxLines: 3,
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ],
               ),
-              Padding(
-                padding: EdgeInsets.only(top: mediumPadding-2),
-                child: (entry.hsk != 7 && prefs.showHskLabels)
-                    ? Text.rich(TextSpan(
-                        text: 'HSK ' + entry.hsk.toString(),
-                        style: TextStyle(decoration: TextDecoration.underline)))
-                    : Text.rich(TextSpan(text: '         ')),
-              )
-            ]),
-      ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: smallPadding),
+              child: (entry.hsk != 7 && prefs.showHskLabels)
+                  ? Text.rich(TextSpan(
+                      text: 'HSK ' + entry.hsk.toString(),
+                      style: TextStyle(decoration: TextDecoration.underline)))
+                  : Text.rich(TextSpan(text: '         ')),
+            )
+          ]),
     );
   }
 }
