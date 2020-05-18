@@ -63,10 +63,25 @@ class ExtendedAppTheme {
   final bool isDark;
 
   Color modeSwitchBackgroundColor;
+  Color strokeOrderControlButtonBackgroundColor;
+  Color strokeOrderControlButtonsEnabled;
+  Color strokeOrderControlButtonsDisabled;
+  Color separatorColor;
 
   /// Default constructor
   ExtendedAppTheme({@required this.isDark}) {
     modeSwitchBackgroundColor =
         isDark ? darkThemeModeSwitchColor : lightThemeModeSwitchColor;
+    strokeOrderControlButtonBackgroundColor = isDark
+        ? darkThemeStrokeOrderControlButtonBackground
+        : lightThemeStrokeOrderControlButtonBackground;
+    strokeOrderControlButtonsEnabled = isDark
+        ? darkThemeStrokeOrderControlButtonsEnabled
+        : lightThemeStrokeOrderControlButtonsEnabled;
+    strokeOrderControlButtonsDisabled = isDark
+        ? darkThemeStrokeOrderControlButtonsDisabled
+        : lightThemeStrokeOrderControlButtonsDisabled;
+    separatorColor =
+        isDark ? darkThemeSeparatorColor : lightThemeSeparatorColor;
   }
 }

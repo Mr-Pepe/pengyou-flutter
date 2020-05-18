@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pengyou/models/entry.dart';
 import 'package:pengyou/ui/reusable/entryCard.dart';
+import 'package:pengyou/values/theme.dart';
+import 'package:provider/provider.dart';
 
 class EntryList extends StatefulWidget {
   final List<Entry> entryList;
@@ -22,9 +24,9 @@ class EntryListState extends State<EntryList> {
         itemBuilder: (BuildContext context, int index) {
           return EntryCard(widget.entryList[index]);
         },
-        separatorBuilder: (BuildContext context, int index) => const Divider(
+        separatorBuilder: (BuildContext context, int index) => Divider(
           height: 0,
-          color: Colors.grey,
+          color: Provider.of<ExtendedAppTheme>(context).separatorColor,
         ),
     );
   }

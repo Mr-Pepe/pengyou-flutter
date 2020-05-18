@@ -6,6 +6,7 @@ import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/utils/formatting.dart';
 import 'package:pengyou/values/dimensions.dart';
 import 'package:pengyou/values/strings.dart';
+import 'package:pengyou/values/theme.dart';
 import 'package:pengyou/viewModels/wordViewViewModel.dart';
 import 'package:provider/provider.dart';
 
@@ -87,8 +88,11 @@ class _WordViewState extends State<WordView> {
           Container(
             constraints: BoxConstraints.expand(height: 36),
             decoration: BoxDecoration(
-                border:
-                    Border(bottom: BorderSide(color: Colors.grey, width: 0.5))),
+                border: Border(
+                    bottom: BorderSide(
+                        color: Provider.of<ExtendedAppTheme>(context)
+                            .separatorColor,
+                        width: 0.5))),
             child: TabBar(
                 unselectedLabelColor: theme.colorScheme.onBackground,
                 labelColor: theme.colorScheme.onBackground,

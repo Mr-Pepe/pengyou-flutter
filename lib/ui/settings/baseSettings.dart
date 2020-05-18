@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pengyou/values/strings.dart';
+import 'package:pengyou/values/theme.dart';
+import 'package:provider/provider.dart';
 
 class BaseSettings extends StatelessWidget {
   @override
@@ -20,17 +22,17 @@ class BaseSettings extends StatelessWidget {
             ListTile(
               title: Text(AppStrings.aboutThisApp),
             ),
-            _buildDivider(),
+            _buildDivider(context),
           ],
         ),
       ],
     );
   }
 
-  Divider _buildDivider() {
+  Divider _buildDivider(BuildContext context) {
     return Divider(
       height: 0,
-      color: Colors.grey,
+      color: Provider.of<ExtendedAppTheme>(context).separatorColor,
     );
   }
 }

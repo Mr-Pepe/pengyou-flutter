@@ -9,6 +9,10 @@ Color lightThemeColorOnPrimary = Colors.white;
 Color lightThemeGeneralTextColor = Color(0xFF323232);
 Color lightThemeColorBackground = Colors.white;
 Color lightThemeModeSwitchColor = Color(0x33FFFFFF);
+Color lightThemeStrokeOrderControlButtonBackground = Color(0xFFF1F1F1);
+Color lightThemeStrokeOrderControlButtonsEnabled = Color(0xFFA3A3A3);
+Color lightThemeStrokeOrderControlButtonsDisabled = Color(0xFFDDDDDD);
+Color lightThemeSeparatorColor = Color(0xFFDDDDDD);
 
 Color darkThemeColorPrimary = Color(0xFF2B2B2B);
 Color darkThemeColorPrimaryVariant = Color(0xFF171717);
@@ -18,6 +22,10 @@ Color darkThemeColorOnPrimary = Color(0xFFEEEEEE);
 Color darkThemeGeneralTextColor = Color(0xFFEEEEEE);
 Color darkThemeColorBackground = Color(0xFF121212);
 Color darkThemeModeSwitchColor = Color(0x33FFFFFF);
+Color darkThemeStrokeOrderControlButtonBackground = darkThemeColorPrimary;
+Color darkThemeStrokeOrderControlButtonsEnabled = Color(0xFFA3A3A3);
+Color darkThemeStrokeOrderControlButtonsDisabled = Color(0xFF565656);
+Color darkThemeSeparatorColor = Color(0xFF6E6E6E);
 
 
 Color tone1DefaultColor = Color(0xFF6FB6D4);
