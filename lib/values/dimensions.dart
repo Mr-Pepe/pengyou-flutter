@@ -12,3 +12,4 @@ const double entryCardPinyinFontSize = 18;
 const double wordViewHeadwordFontSize = 30;
 const double wordViewPinyinFontSize = 22;
 const double wordViewHskFontSize = 20;
+const double wordViewDefinitionFontSize = 18;

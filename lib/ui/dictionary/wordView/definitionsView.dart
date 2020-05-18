@@ -33,13 +33,28 @@ class _DefinitionsViewState extends State<DefinitionsView> {
         padding: const EdgeInsets.fromLTRB(materialStandardPadding,
             materialStandardPadding, materialStandardPadding, 0),
         child: Table(
+          columnWidths: {0: IntrinsicColumnWidth()},
           children: <TableRow>[
             ...List.generate(
               formattedDefinitions.length,
               (index) => TableRow(
                 children: <Widget>[
-                  Text(index.toString()),
-                  Text("asd"),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Text(
+                      (index + 1).toString(),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: wordViewDefinitionFontSize),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: smallPadding),
+                    child: Text.rich(
+                      formattedDefinitions[index],
+                      style: TextStyle(fontSize: wordViewDefinitionFontSize),
+                    ),
+                  ),
                 ],
               ),
             ),
