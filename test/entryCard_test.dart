@@ -53,9 +53,13 @@ void main() {
 
     await tester.pumpWidget(ChangeNotifierProvider<AppPreferences>.value(
         value: mockPrefs,
-        child: Directionality(
-          child: EntryCard(mockEntry1),
-          textDirection: TextDirection.ltr,
+        child: MaterialApp(
+          home: Scaffold(
+            body: Directionality(
+              child: EntryCard(mockEntry1),
+              textDirection: TextDirection.ltr,
+            ),
+          ),
         )));
 
     final headwordFinder = find
@@ -83,10 +87,12 @@ void main() {
 
     await tester.pumpWidget(ChangeNotifierProvider<AppPreferences>.value(
         value: mockPrefs,
-        child: Directionality(
+        child: MaterialApp(
+            home: Scaffold(
+                body: Directionality(
           child: EntryCard(mockEntry2),
           textDirection: TextDirection.ltr,
-        )));
+        )))));
 
     final headwordFinder = find.byWidgetPredicate(
         (widget) => fromRichTextToPlainText(widget) == '事實 (事实)');
@@ -113,13 +119,15 @@ void main() {
 
     await tester.pumpWidget(ChangeNotifierProvider<AppPreferences>.value(
         value: mockPrefs,
-        child: Directionality(
+        child: MaterialApp(
+            home: Scaffold(
+                body: Directionality(
           child: EntryCard(mockEntry1),
           textDirection: TextDirection.ltr,
-        )));
+        )))));
 
-    final headwordFinder = find.byWidgetPredicate(
-        (widget) => fromRichTextToPlainText(widget) == '事實');
+    final headwordFinder = find
+        .byWidgetPredicate((widget) => fromRichTextToPlainText(widget) == '事實');
     final pinyinFinder = find.byWidgetPredicate(
         (widget) => fromRichTextToPlainText(widget) == 'shìshí');
     final hskFinder = find.byWidgetPredicate(
@@ -132,7 +140,6 @@ void main() {
     expect(hskFinder, findsNothing);
     expect(definitionFinder, findsOneWidget);
   });
-
 
   // TODO: Test Zhuyin here once implemented
 }
