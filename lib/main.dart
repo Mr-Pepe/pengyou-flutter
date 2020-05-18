@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pengyou/dataSources/appDatabase.dart';
 import 'package:pengyou/repositories/EntryRepository.dart';
+import 'package:pengyou/repositories/strokeOrderRepoitory.dart';
 import 'package:pengyou/ui/homeView.dart';
 import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/values/strings.dart';
@@ -38,6 +39,11 @@ class PengyouApp extends StatelessWidget {
         ProxyProvider<DBProvider, EntryRepository>(
           update: (context, dbProvider, entryRepository) =>
               EntryRepository(db: dbProvider),
+        ),
+
+        ProxyProvider<DBProvider, StrokeOrderRepository>(
+          update: (context, dbProvider, strokeOrderRepository) =>
+              StrokeOrderRepository(db: dbProvider),
         ),
       ],
       child: Consumer<AppPreferences>(builder: (context, prefs, child) {

@@ -34,25 +34,25 @@ void main() {
       .thenAnswer((realInvocation) => Future.value(unavailableStrokeOrder));
 
   test('Get stroke order for single character', () async {
-    expect(await repository.getStrokeOrder('主'), [mockStrokeOrder1]);
+    expect(await repository.getStrokeOrders('主'), [mockStrokeOrder1]);
   });
 
   test('Get stroke order for character without stroke order', () async {
-    expect(await repository.getStrokeOrder('說'), [unavailableStrokeOrder]);
+    expect(await repository.getStrokeOrders('說'), [unavailableStrokeOrder]);
   });
 
   test('Get stroke order for empty string', () async {
-    expect(await repository.getStrokeOrder(''), []);
+    expect(await repository.getStrokeOrders(''), []);
   });
 
   test('Get stroke order for whole word', () async {
-    expect(await repository.getStrokeOrder('主丽'),
+    expect(await repository.getStrokeOrders('主丽'),
         [mockStrokeOrder1, mockStrokeOrder2]);
   });
 
   test('Get stroke order for whole word with partly missing stroke orders',
       () async {
-    expect(await repository.getStrokeOrder('主說丽'),
+    expect(await repository.getStrokeOrders('主說丽'),
         [mockStrokeOrder1, unavailableStrokeOrder, mockStrokeOrder2]);
   });
 }

@@ -7,7 +7,7 @@ class StrokeOrderRepository {
 
   final DBProvider db;
 
-  Future<List<StrokeOrder>> getStrokeOrder(String word) async {
+  Future<List<StrokeOrder>> getStrokeOrders(String word) async {
     List<StrokeOrder> strokeOrders = [];
 
     for (var iCharacter = 0;
@@ -17,7 +17,6 @@ class StrokeOrderRepository {
       final character = word.characters.skip(iCharacter).take(1).toString();
 
       strokeOrders.add(await db.getStrokeOrder(character.toString()));
-
     }
     return strokeOrders;
   }

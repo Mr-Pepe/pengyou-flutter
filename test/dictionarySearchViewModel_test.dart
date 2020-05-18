@@ -28,7 +28,7 @@ void main() {
         .thenAnswer((_) async => Future.value([mockEntry]));
   when(mockEntryRepository.searchForEnglish("*fei*"))
         .thenAnswer((_) async => Future.value([mockEntry, mockEntry]));
-  
+
   test('Search', () async {
     await model.search("fei");
 
