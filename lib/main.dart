@@ -47,11 +47,14 @@ class PengyouApp extends StatelessWidget {
         ),
       ],
       child: Consumer<AppPreferences>(builder: (context, prefs, child) {
-        return MaterialApp(
-          title: AppStrings.applicationName,
-          theme: AppTheme(isDark: prefs.themeIsDark).themeData,
-          darkTheme: AppTheme(isDark: true).themeData,
-          home: HomeView(),
+        return Provider<ExtendedAppTheme>(
+          create: (_) => ExtendedAppTheme(isDark: prefs.themeIsDark),
+          child: MaterialApp(
+            title: AppStrings.applicationName,
+            theme: StandardAppTheme(isDark: prefs.themeIsDark).themeData,
+            darkTheme: StandardAppTheme(isDark: true).themeData,
+            home: HomeView(),
+          ),
         );
       }),
     );

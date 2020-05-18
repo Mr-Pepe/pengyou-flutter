@@ -27,6 +27,7 @@ class _DictionarySearchViewState extends State<DictionarySearchView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final extendedTheme = Provider.of<ExtendedAppTheme>(context);
 
     return ChangeNotifierProvider<DictionarySearchViewModel>(
       create: (_) => _model == null
@@ -97,7 +98,7 @@ class _DictionarySearchViewState extends State<DictionarySearchView> {
                   padding: EdgeInsets.fromLTRB(mediumPadding + 5, tinyPadding,
                       mediumPadding + 5, tinyPadding),
                   decoration: BoxDecoration(
-                      color: theme.colorScheme.modeSwitchBackgroundColor,
+                      color: extendedTheme.modeSwitchBackgroundColor,
                       borderRadius: BorderRadius.all(Radius.circular(100))),
                   child: Row(
                     children: <Widget>[
