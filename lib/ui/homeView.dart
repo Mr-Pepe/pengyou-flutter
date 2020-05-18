@@ -33,6 +33,8 @@ class HomeViewState extends State<HomeView> {
     } else {
       SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop');
     }
+
+    return Future.value(false);
   }
 
   @override

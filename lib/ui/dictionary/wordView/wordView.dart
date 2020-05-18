@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pengyou/models/entry.dart';
+import 'package:pengyou/ui/dictionary/wordView/definitionsView.dart';
 import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/utils/formatting.dart';
 import 'package:pengyou/values/dimensions.dart';
@@ -14,7 +15,7 @@ class WordView extends StatefulWidget {
 
   WordView(this.entry);
 
-  Entry entry;
+  final Entry entry;
 }
 
 class _WordViewState extends State<WordView> {
@@ -34,49 +35,73 @@ class _WordViewState extends State<WordView> {
           final formattedDefinitions = formatDefinitions(
               model.entry.definitions, prefs.chineseMode, prefs.intonationMode);
 
-          return Column(children: <Widget>[
-            AppBar(
-              title: Text(""),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                        largePadding, largePadding, largePadding, largePadding),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text.rich(
-                          formatHeadword(model.entry, prefs.chineseMode,
-                              prefs.getToneColors(),
-                              mainFontSize: wordViewHeadwordFontSize,
-                              alternativeScalingFactor:
-                                  prefs.alternativeHeadwordScalingFactor),
-                          textAlign: TextAlign.start,
-                        ),
-                        Text(
-                          formatIntonation(
-                              model.entry.pinyin, prefs.intonationMode),
-                          style: TextStyle(fontSize: wordViewPinyinFontSize),
-                        ),
-                      ],
+          return DefaultTabController(
+            length: 3,
+            child: Column(children: <Widget>[
+              AppBar(
+                title: Text(""),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(materialStandardPadding,
+                          materialStandardPadding, materialStandardPadding, smallPadding),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text.rich(
+                            formatHeadword(model.entry, prefs.chineseMode,
+                                prefs.getToneColors(),
+                                mainFontSize: wordViewHeadwordFontSize,
+                                alternativeScalingFactor:
+                                    prefs.alternativeHeadwordScalingFactor),
+                            textAlign: TextAlign.start,
+                          ),
+                          Text(
+                            formatIntonation(
+                                model.entry.pinyin, prefs.intonationMode),
+                            style: TextStyle(fontSize: wordViewPinyinFontSize),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
+                  if (model.entry.hsk != 7 && prefs.showHskLabels)
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(
+                          0, materialStandardPadding + 5, materialStandardPadding, 0),
+                      child: Text.rich(TextSpan(
+                              text: 'HSK ' + model.entry.hsk.toString(),
+                              style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  fontSize: wordViewHskFontSize))),
+                    )
+                ],
+              ),
+              TabBar(
+                unselectedLabelColor: theme.colorScheme.onBackground,
+                labelColor: theme.colorScheme.onBackground,
+                indicatorColor: theme.highlightColor,
+                labelStyle: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1),
+              tabs: [
+                Tab(text: AppStrings.definitionsTabTitle,
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(mediumPadding, largePadding+5, largePadding, 0),
-                  child: (model.entry.hsk != 7 && prefs.showHskLabels)
-                      ? Text.rich(TextSpan(
-                          text: 'HSK ' + model.entry.hsk.toString(),
-                          style:
-                              TextStyle(decoration: TextDecoration.underline, fontSize: wordViewHskFontSize)))
-                      : Text.rich(TextSpan(text: '         ')),
-                )
-              ],
-            ),
-          ]);
+                Tab(text: AppStrings.strokeTabTitle),
+                Tab(text: AppStrings.wordsTabTitle),
+              ]),
+              Expanded(
+                child: TabBarView(
+                  children: <Widget>[
+                    DefinitionsView(model),
+                    Icon(Icons.ac_unit),
+                    Icon(Icons.update),
+                  ],
+                ),
+              )
+            ]),
+          );
         }));
   }
 }

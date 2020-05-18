@@ -1,0 +1,51 @@
+import 'package:flutter/widgets.dart';
+import 'package:pengyou/utils/appPreferences.dart';
+import 'package:pengyou/utils/formatting.dart';
+import 'package:pengyou/values/dimensions.dart';
+import 'package:pengyou/values/strings.dart';
+import 'package:pengyou/viewModels/wordViewViewModel.dart';
+import 'package:provider/provider.dart';
+
+class DefinitionsView extends StatefulWidget {
+  DefinitionsView(this.model);
+
+  final WordViewViewModel model;
+
+  @override
+  _DefinitionsViewState createState() => _DefinitionsViewState();
+}
+
+class _DefinitionsViewState extends State<DefinitionsView> {
+  List<TextSpan> formattedDefinitions;
+  @override
+  Widget build(BuildContext context) {
+    final prefs = Provider.of<AppPreferences>(context);
+
+    if (formattedDefinitions == null) {
+      formattedDefinitions = formatDefinitions(widget.model.entry.definitions,
+          prefs.chineseMode, prefs.intonationMode);
+    }
+
+    if (formattedDefinitions.isEmpty) {
+      return Center(child: Text(AppStrings.noDefinitionsFound));
+    } else {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(materialStandardPadding,
+            materialStandardPadding, materialStandardPadding, 0),
+        child: Table(
+          children: <TableRow>[
+            ...List.generate(
+              formattedDefinitions.length,
+              (index) => TableRow(
+                children: <Widget>[
+                  Text(index.toString()),
+                  Text("asd"),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+}

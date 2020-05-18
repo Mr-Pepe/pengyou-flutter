@@ -1,7 +1,6 @@
 class AppStrings {
   static const String applicationName = "Pengyou";
   static const String dictionary = "Dictionary";
-  static const String noDefinitionFound = "No definition found, but this entry might be used in other words.";
   static const String submit = "Submit";
   static const String cancel = "Cancel";
 
@@ -22,4 +21,10 @@ class AppStrings {
     static const String headwordColoring = "Headword coloring";
   static const String strokeOrderAnimationAndQuiz = "Stroke order animation and quiz";
   static const String aboutThisApp = "About this app";
+
+  // Word view
+  static const String definitionsTabTitle = "DEFINITIONS";
+  static const String strokeTabTitle = "STROKES";
+  static const String wordsTabTitle = "WORDS";
+  static const String noDefinitionsFound = "No definition found, but this entry might be used in other words.";
 }

@@ -24,7 +24,7 @@ class EntryCard extends StatelessWidget {
 
     if (formattedDefinitions.isEmpty) {
       definitions = TextSpan(
-          text: AppStrings.noDefinitionFound,
+          text: AppStrings.noDefinitionsFound,
           style: TextStyle(fontStyle: FontStyle.italic));
     } else {
       for (var iDefinition = 0;
