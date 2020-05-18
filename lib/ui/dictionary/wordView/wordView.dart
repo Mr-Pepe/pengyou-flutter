@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pengyou/models/entry.dart';
 import 'package:pengyou/ui/dictionary/wordView/definitionsView.dart';
+import 'package:pengyou/ui/dictionary/wordView/strokeOrderView.dart';
 import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/utils/formatting.dart';
 import 'package:pengyou/values/dimensions.dart';
@@ -111,7 +112,7 @@ class _WordViewState extends State<WordView> {
             child: TabBarView(
               children: <Widget>[
                 DefinitionsView(model),
-                Icon(Icons.ac_unit),
+                StrokeOrderView(),
                 Icon(Icons.update),
               ],
             ),
