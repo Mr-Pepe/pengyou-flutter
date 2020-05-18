@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'package:pengyou/models/entry.dart';
+import 'package:pengyou/models/strokeOrder.dart';
 import 'package:sqflite/sqflite.dart';
 
 // database table and column names
@@ -32,6 +33,11 @@ final String tableTradToSimplPhrases = 'trad_to_simpl_phrases';
 // columnId
 // columnTraditional
 // columnSimplified
+
+final String tableStrokeOrders = "stroke_orders";
+// columnId
+final String columnCharacter = "character";
+final String columnJson = "json";
 
 const int MAX_SEARCH_RESULTS = 201;
 
@@ -179,6 +185,22 @@ class DBProvider {
       return maps[0][columnSimplified];
     } else {
       return '';
+    }
+  }
+
+  Future<StrokeOrder> getStrokeOrder(String query) async {
+    Database db = await database;
+
+    List<Map> maps = await db.query(
+      tableStrokeOrders,
+      where: 'character = ?',
+      whereArgs: [query],
+    );
+
+    if (maps.length > 0) {
+      return StrokeOrder.fromMap(maps.first);
+    } else {
+      return StrokeOrder(id: -1, character: query, json: '');
     }
   }
 }
