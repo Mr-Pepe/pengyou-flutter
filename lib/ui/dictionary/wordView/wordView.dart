@@ -86,6 +86,9 @@ class _WordViewState extends State<WordView> {
           ),
           Container(
             constraints: BoxConstraints.expand(height: 36),
+            decoration: BoxDecoration(
+                border:
+                    Border(bottom: BorderSide(color: Colors.grey, width: 0.5))),
             child: TabBar(
                 unselectedLabelColor: theme.colorScheme.onBackground,
                 labelColor: theme.colorScheme.onBackground,
