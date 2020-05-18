@@ -23,6 +23,8 @@ class _DictionaryNavigatorState extends State<DictionaryNavigator> {
                   return DictionarySearchView();
                 case '/wordView':
                   return WordView(settings.arguments);
+                default:
+                  return Text("Placeholder");
               }
             });
       },

@@ -14,7 +14,6 @@ class EntryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final prefs = Provider.of<AppPreferences>(context);
 
     final formattedDefinitions = formatDefinitions(

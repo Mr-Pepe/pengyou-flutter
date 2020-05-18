@@ -11,7 +11,6 @@ class GeneralAppearanceSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final prefs = Provider.of<AppPreferences>(context);
-    final theme = Theme.of(context);
 
     return Column(
       children: <Widget>[

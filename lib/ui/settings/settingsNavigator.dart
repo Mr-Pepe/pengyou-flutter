@@ -24,6 +24,8 @@ class _SettingsNavigatorState extends State<SettingsNavigator> {
                 return BaseSettings();
               case '/generalAppearanceSettings':
                 return GeneralAppearanceSettings();
+              default:
+                return Text("Placeholder");
             }
           }
         );

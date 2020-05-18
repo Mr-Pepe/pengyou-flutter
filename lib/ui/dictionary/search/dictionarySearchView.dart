@@ -21,21 +21,12 @@ class _DictionarySearchViewState extends State<DictionarySearchView> {
   @override
   void initState() {
     super.initState();
-    _textController = TextEditingController(
-      text: 'ni',
-    );
+    _textController = TextEditingController();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final prefs = Provider.of<AppPreferences>(context);
-
-    void changeThings(String asd) {
-      prefs.setChineseMode(ChineseMode.traditionalSimplified);
-      prefs.setIntonationMode(IntonationMode.pinyinNumbers);
-      prefs.setDarkTheme(!prefs.themeIsDark);
-    }
 
     return ChangeNotifierProvider<DictionarySearchViewModel>(
       create: (_) => _model == null
@@ -64,7 +55,7 @@ class _DictionarySearchViewState extends State<DictionarySearchView> {
                 backgroundColor: theme.colorScheme.primary,
                 title: Container(
                   padding: EdgeInsets.fromLTRB(
-                      largePadding, smallPadding, largePadding, mediumPadding),
+                      materialStandardPadding, smallPadding, materialStandardPadding, mediumPadding),
                   child: TextField(
                     style: theme.textTheme.bodyText2.copyWith(
                         color: theme.colorScheme.onPrimary, fontSize: 20),
@@ -101,8 +92,8 @@ class _DictionarySearchViewState extends State<DictionarySearchView> {
                   color: theme.colorScheme.primary,
                 ),
                 child: Container(
-                  margin: EdgeInsets.fromLTRB(materialStandardPadding + largePadding, smallPadding,
-                      materialStandardPadding + largePadding, mediumPadding),
+                  margin: EdgeInsets.fromLTRB(materialStandardPadding*2, smallPadding,
+                      materialStandardPadding*2, mediumPadding),
                   padding: EdgeInsets.fromLTRB(mediumPadding + 5, tinyPadding,
                       mediumPadding + 5, tinyPadding),
                   decoration: BoxDecoration(

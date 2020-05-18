@@ -24,7 +24,6 @@ class _WordViewState extends State<WordView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final prefs = Provider.of<AppPreferences>(context);
 
     return ChangeNotifierProvider<WordViewViewModel>(
         create: (_) => _model == null
@@ -32,8 +31,6 @@ class _WordViewState extends State<WordView> {
             : _model,
         child: Consumer2<WordViewViewModel, AppPreferences>(
             builder: (context, model, prefs, child) {
-          final formattedDefinitions = formatDefinitions(
-              model.entry.definitions, prefs.chineseMode, prefs.intonationMode);
 
           return DefaultTabController(
             length: 3,
@@ -46,8 +43,11 @@ class _WordViewState extends State<WordView> {
                 children: <Widget>[
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(materialStandardPadding,
-                          materialStandardPadding, materialStandardPadding, smallPadding),
+                      padding: const EdgeInsets.fromLTRB(
+                          materialStandardPadding,
+                          materialStandardPadding,
+                          materialStandardPadding,
+                          mediumPadding),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -71,26 +71,34 @@ class _WordViewState extends State<WordView> {
                   if (model.entry.hsk != 7 && prefs.showHskLabels)
                     Padding(
                       padding: EdgeInsets.fromLTRB(
-                          0, materialStandardPadding + 5, materialStandardPadding, 0),
+                          0,
+                          materialStandardPadding + 5,
+                          materialStandardPadding,
+                          0),
                       child: Text.rich(TextSpan(
-                              text: 'HSK ' + model.entry.hsk.toString(),
-                              style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  fontSize: wordViewHskFontSize))),
+                          text: 'HSK ' + model.entry.hsk.toString(),
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontSize: wordViewHskFontSize))),
                     )
                 ],
               ),
-              TabBar(
-                unselectedLabelColor: theme.colorScheme.onBackground,
-                labelColor: theme.colorScheme.onBackground,
-                indicatorColor: theme.highlightColor,
-                labelStyle: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1),
-              tabs: [
-                Tab(text: AppStrings.definitionsTabTitle,
-                ),
-                Tab(text: AppStrings.strokeTabTitle),
-                Tab(text: AppStrings.wordsTabTitle),
-              ]),
+              Container(
+                constraints: BoxConstraints.expand(height: 36),
+                child: TabBar(
+                    unselectedLabelColor: theme.colorScheme.onBackground,
+                    labelColor: theme.colorScheme.onBackground,
+                    indicatorColor: theme.highlightColor,
+                    labelStyle: TextStyle(
+                        fontWeight: FontWeight.bold, letterSpacing: 1),
+                    indicatorSize: TabBarIndicatorSize.label,
+                    indicatorWeight: 3,
+                    tabs: [
+                      Tab(text: AppStrings.definitionsTabTitle),
+                      Tab(text: AppStrings.strokeTabTitle),
+                      Tab(text: AppStrings.wordsTabTitle),
+                    ]),
+              ),
               Expanded(
                 child: TabBarView(
                   children: <Widget>[
