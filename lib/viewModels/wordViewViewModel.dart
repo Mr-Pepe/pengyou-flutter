@@ -3,7 +3,6 @@ import 'package:pengyou/models/entry.dart';
 import 'package:pengyou/models/strokeOrder.dart';
 import 'package:pengyou/repositories/EntryRepository.dart';
 import 'package:pengyou/repositories/strokeOrderRepoitory.dart';
-import 'package:pengyou/utils/enumsAndConstants.dart';
 
 class WordViewViewModel extends ChangeNotifier {
   WordViewViewModel(this._entryRepository, this._strokeOrderRepository, this.entry);

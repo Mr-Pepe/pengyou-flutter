@@ -4,6 +4,7 @@ import 'package:pengyou/models/entry.dart';
 import 'package:pengyou/ui/dictionary/wordView/definitionsView.dart';
 import 'package:pengyou/ui/dictionary/wordView/strokeOrderView.dart';
 import 'package:pengyou/utils/appPreferences.dart';
+import 'package:pengyou/utils/enumsAndConstants.dart';
 import 'package:pengyou/utils/formatting.dart';
 import 'package:pengyou/values/dimensions.dart';
 import 'package:pengyou/values/strings.dart';
@@ -21,21 +22,15 @@ class WordView extends StatefulWidget {
 }
 
 class _WordViewState extends State<WordView> {
-  WordViewViewModel _model;
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return ChangeNotifierProvider<WordViewViewModel>(create: (_) {
-      if (_model == null) {
-        final model = WordViewViewModel(
-            Provider.of(context), Provider.of(context), widget.entry);
-        model.init();
-        return model;
-      } else {
-        return _model;
-      }
+      final model = WordViewViewModel(
+          Provider.of(context), Provider.of(context), widget.entry);
+      model.init();
+      return model;
     }, child: Consumer2<WordViewViewModel, AppPreferences>(
         builder: (context, model, prefs, child) {
       return DefaultTabController(
@@ -111,8 +106,11 @@ class _WordViewState extends State<WordView> {
           Expanded(
             child: TabBarView(
               children: <Widget>[
-                DefinitionsView(model),
-                StrokeOrderView(),
+                DefinitionsView(model.entry.definitions),
+                StrokeOrderView((prefs.chineseMode == ChineseMode.simplified ||
+                        prefs.chineseMode == ChineseMode.simplifiedTraditional)
+                    ? model.simplifiedStrokeOrders
+                    : model.traditionalStrokeOrders),
                 Icon(Icons.update),
               ],
             ),

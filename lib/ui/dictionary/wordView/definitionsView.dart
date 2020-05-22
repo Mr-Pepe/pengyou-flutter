@@ -7,9 +7,9 @@ import 'package:pengyou/viewModels/wordViewViewModel.dart';
 import 'package:provider/provider.dart';
 
 class DefinitionsView extends StatefulWidget {
-  DefinitionsView(this.model);
+  DefinitionsView(this.definitions);
 
-  final WordViewViewModel model;
+  final String definitions;
 
   @override
   _DefinitionsViewState createState() => _DefinitionsViewState();
@@ -22,7 +22,7 @@ class _DefinitionsViewState extends State<DefinitionsView> {
     final prefs = Provider.of<AppPreferences>(context);
 
     if (formattedDefinitions == null) {
-      formattedDefinitions = formatDefinitions(widget.model.entry.definitions,
+      formattedDefinitions = formatDefinitions(widget.definitions,
           prefs.chineseMode, prefs.intonationMode);
     }
 
