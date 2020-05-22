@@ -63,10 +63,12 @@ class ExtendedAppTheme {
   final bool isDark;
 
   Color modeSwitchBackgroundColor;
+  Color separatorColor;
+
+  // Stroke order control buttons
   Color strokeOrderControlButtonBackgroundColor;
   Color strokeOrderControlButtonsEnabled;
   Color strokeOrderControlButtonsDisabled;
-  Color separatorColor;
 
   /// Default constructor
   ExtendedAppTheme({@required this.isDark}) {

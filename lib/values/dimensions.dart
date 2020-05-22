@@ -13,3 +13,5 @@ const double wordViewHeadwordFontSize = 30;
 const double wordViewPinyinFontSize = 22;
 const double wordViewHskFontSize = 18;
 const double wordViewDefinitionFontSize = 18;
+
+const double strokeOrderControlButtonSize = 40;
