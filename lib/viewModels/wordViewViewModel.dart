@@ -3,9 +3,11 @@ import 'package:pengyou/models/entry.dart';
 import 'package:pengyou/models/strokeOrder.dart';
 import 'package:pengyou/repositories/EntryRepository.dart';
 import 'package:pengyou/repositories/strokeOrderRepoitory.dart';
+import 'package:pengyou/utils/enumsAndConstants.dart';
 
 class WordViewViewModel extends ChangeNotifier {
-  WordViewViewModel(this._entryRepository, this._strokeOrderRepository, this.entry);
+  WordViewViewModel(
+      this._entryRepository, this._strokeOrderRepository, this.entry);
 
   final EntryRepository _entryRepository;
   final StrokeOrderRepository _strokeOrderRepository;
@@ -22,8 +24,10 @@ class WordViewViewModel extends ChangeNotifier {
   int get selectedStrokeOrder => _selectedStrokeOrder;
 
   void init() async {
-    _simplifiedStrokeOrders = await _strokeOrderRepository.getStrokeOrders(entry.simplified);
-    _traditionalStrokeOrders = await _strokeOrderRepository.getStrokeOrders(entry.traditional);
+    _simplifiedStrokeOrders =
+        await _strokeOrderRepository.getStrokeOrders(entry.simplified);
+    _traditionalStrokeOrders =
+        await _strokeOrderRepository.getStrokeOrders(entry.traditional);
 
     notifyListeners();
   }
@@ -31,5 +35,12 @@ class WordViewViewModel extends ChangeNotifier {
   void setSelectedStrokeOrder(int value) {
     _selectedStrokeOrder = value;
     notifyListeners();
+  }
+
+  String getActiveHeadword(int chineseMode) {
+    return (chineseMode == ChineseMode.simplified ||
+            chineseMode == ChineseMode.simplifiedTraditional)
+        ? entry.simplified
+        : entry.traditional;
   }
 }

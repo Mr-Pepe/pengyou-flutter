@@ -145,19 +145,7 @@ class _WordViewState extends State<WordView> with TickerProviderStateMixin {
                               : ScrollPhysics(),
                           children: <Widget>[
                             DefinitionsView(model.entry.definitions),
-                            controller != null
-                                ? StrokeOrderView(
-                                    _strokeOrderAnimationControllers)
-                                : Center(
-                                    child: Text(
-                                      AppStrings.noStrokesFound +
-                                          headword
-                                                  .toString()
-                                                  .characters
-                                                  .toList()[
-                                              model.selectedStrokeOrder],
-                                    ),
-                                  ),
+                            StrokeOrderView(_strokeOrderAnimationControllers),
                             Icon(Icons.update),
                           ],
                         );
