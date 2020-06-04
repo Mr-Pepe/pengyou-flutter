@@ -27,4 +27,5 @@ class AppStrings {
   static const String strokeTabTitle = "STROKES";
   static const String wordsTabTitle = "WORDS";
   static const String noDefinitionsFound = "No definition found, but this entry might be used in other words.";
+  static const String noStrokesFound = "No stroke order diagram found for:\u0020";
 }

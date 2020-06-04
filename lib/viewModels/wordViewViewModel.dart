@@ -18,6 +18,9 @@ class WordViewViewModel extends ChangeNotifier {
   List<StrokeOrder> _traditionalStrokeOrders = <StrokeOrder>[];
   List<StrokeOrder> get traditionalStrokeOrders => _traditionalStrokeOrders;
 
+  int _selectedStrokeOrder = 0;
+  int get selectedStrokeOrder => _selectedStrokeOrder;
+
   void init() async {
     _simplifiedStrokeOrders = await _strokeOrderRepository.getStrokeOrders(entry.simplified);
     _traditionalStrokeOrders = await _strokeOrderRepository.getStrokeOrders(entry.traditional);
@@ -25,4 +28,8 @@ class WordViewViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setSelectedStrokeOrder(int value) {
+    _selectedStrokeOrder = value;
+    notifyListeners();
+  }
 }

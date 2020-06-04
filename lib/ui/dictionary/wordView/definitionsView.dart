@@ -3,7 +3,6 @@ import 'package:pengyou/utils/appPreferences.dart';
 import 'package:pengyou/utils/formatting.dart';
 import 'package:pengyou/values/dimensions.dart';
 import 'package:pengyou/values/strings.dart';
-import 'package:pengyou/viewModels/wordViewViewModel.dart';
 import 'package:provider/provider.dart';
 
 class DefinitionsView extends StatefulWidget {
