@@ -30,7 +30,14 @@ class StrokeOrderView extends StatelessWidget {
           child: Padding(
             padding:
                 const EdgeInsets.symmetric(vertical: materialStandardPadding),
-            child: StrokeDiagramControls(controller),
+            child: ChangeNotifierProvider<StrokeOrderAnimationController>.value(
+              value: controller,
+              child: Consumer<StrokeOrderAnimationController>(
+                builder: (context, controller, child) {
+                  return StrokeDiagramControls(controller);
+                },
+              ),
+            ),
           ),
         )
       ],
@@ -93,47 +100,41 @@ class StrokeDiagramControls extends StatelessWidget {
   Widget build(BuildContext context) {
     final extendedTheme = Provider.of<ExtendedAppTheme>(context);
 
-    return ChangeNotifierProvider.value(
-      value: controller,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-                color: extendedTheme.strokeOrderControlButtonBackgroundColor,
-                borderRadius: BorderRadius.all(Radius.circular(100))),
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                      mediumPadding + 4, 0, mediumPadding, 0),
-                  child: OutlineButton(),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: mediumPadding),
-                  child: ResetButton(),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: mediumPadding),
-                  child: PlayButton(),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: mediumPadding),
-                  child: NextButton(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                      mediumPadding, 0, mediumPadding + 4, 0),
-                  child: QuizButton(),
-                ),
-              ],
-            ),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+              color: extendedTheme.strokeOrderControlButtonBackgroundColor,
+              borderRadius: BorderRadius.all(Radius.circular(100))),
+          child: Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                    mediumPadding + 4, 0, mediumPadding, 0),
+                child: OutlineButton(),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: mediumPadding),
+                child: ResetButton(),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: mediumPadding),
+                child: PlayButton(),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: mediumPadding),
+                child: NextButton(),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                    mediumPadding, 0, mediumPadding + 4, 0),
+                child: QuizButton(),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

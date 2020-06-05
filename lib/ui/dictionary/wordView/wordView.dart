@@ -54,6 +54,10 @@ class _WordViewState extends State<WordView> with TickerProviderStateMixin {
             }
           });
 
+          final currentController = _strokeOrderAnimationControllers.length > 0
+              ? _strokeOrderAnimationControllers[model.selectedStrokeOrder]
+              : null;
+
           final headword = formatHeadword(
               model.entry, prefs.chineseMode, prefs.getToneColors(),
               mainFontSize: wordViewHeadwordFontSize,
@@ -131,28 +135,18 @@ class _WordViewState extends State<WordView> with TickerProviderStateMixin {
                       ]),
                 ),
                 Expanded(
-                  child: ChangeNotifierProvider<
-                      StrokeOrderAnimationController>.value(
-                    value: _strokeOrderAnimationControllers.length > 0
-                        ? _strokeOrderAnimationControllers[
-                            model.selectedStrokeOrder]
-                        : null,
-                    child: Consumer<StrokeOrderAnimationController>(
-                      builder: (context, controller, child) {
-                        return TabBarView(
-                          physics: controller != null && controller.isQuizzing
-                              ? NeverScrollableScrollPhysics()
-                              : ScrollPhysics(),
-                          children: <Widget>[
-                            DefinitionsView(model.entry.definitions),
-                            StrokeOrderView(_strokeOrderAnimationControllers),
-                            Icon(Icons.update),
-                          ],
-                        );
-                      },
-                    ),
+                  child: TabBarView(
+                    physics: currentController != null &&
+                            currentController.isQuizzing
+                        ? NeverScrollableScrollPhysics()
+                        : ScrollPhysics(),
+                    children: <Widget>[
+                      DefinitionsView(model.entry.definitions),
+                      StrokeOrderView(_strokeOrderAnimationControllers),
+                      Icon(Icons.update),
+                    ],
                   ),
-                )
+                ),
               ],
             ),
           );
