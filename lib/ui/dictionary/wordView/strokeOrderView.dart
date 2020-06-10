@@ -173,6 +173,7 @@ class QuizButton extends StatelessWidget {
     final _extendedTheme = Provider.of<ExtendedAppTheme>(context);
     final _controller = Provider.of<StrokeOrderAnimationController>(context);
     final _theme = Theme.of(context);
+    final model = Provider.of<WordViewViewModel>(context);
 
     final _controllerAvailable = _controller != null;
 
@@ -191,8 +192,10 @@ class QuizButton extends StatelessWidget {
       onTap: () {
         if (_controllerAvailable && !_controller.isQuizzing) {
           _controller.startQuiz();
+          model.setSwipingBlocked(true);
         } else {
           _controller.stopQuiz();
+          model.setSwipingBlocked(false);
         }
       },
     );

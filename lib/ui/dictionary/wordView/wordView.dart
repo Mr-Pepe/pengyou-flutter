@@ -99,6 +99,9 @@ class _WordViewState extends State<WordView> {
                                   .separatorColor,
                               width: 0.5))),
                   child: TabBar(
+                      onTap: (_) {
+                        model.setSwipingBlocked(false);
+                      },
                       unselectedLabelColor: theme.colorScheme.onBackground,
                       labelColor: theme.colorScheme.onBackground,
                       indicatorColor: theme.highlightColor,
