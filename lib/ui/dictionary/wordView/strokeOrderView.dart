@@ -33,7 +33,7 @@ class _StrokeOrderViewState extends State<StrokeOrderView>
   @override
   void dispose() {
     for (var controller in _strokeOrderAnimationControllers) {
-      controller.dispose();
+      controller?.dispose();
     }
     _pageController.dispose();
     super.dispose();
@@ -64,55 +64,51 @@ class _StrokeOrderViewState extends State<StrokeOrderView>
       value: _strokeOrderAnimationControllers[_selectedIndex],
       child: Consumer<StrokeOrderAnimationController>(
         builder: (context, controller, child) {
-          return AnimatedBuilder(
-            animation: controller.strokeAnimationController,
-            builder: (context, child) {
-              return Column(
-                children: <Widget>[
-                  Expanded(
-                    child: PageView(
-                      physics: controller != null && controller.isQuizzing
-                          ? NeverScrollableScrollPhysics()
-                          : ScrollPhysics(),
-                      controller: _pageController,
-                      scrollDirection: Axis.vertical,
-                      children: List.generate(
-                          _strokeOrderAnimationControllers.length, (index) {
-                        if (controller != null) {
-                          return FittedBox(
-                            child: StrokeOrderAnimator(
-                              _strokeOrderAnimationControllers[index],
-                              key: UniqueKey(),
-                            ),
-                          );
-                        } else {
-                          return Center(
-                            child: Text(AppStrings.noStrokesFound +
-                                model
-                                    .getActiveHeadword(prefs.chineseMode)
-                                    .characters
-                                    .toList()[_selectedIndex]),
-                          );
-                        }
-                      }),
-                      onPageChanged: (index) {
-                        setState(() {
-                          _strokeOrderAnimationControllers[_selectedIndex].stopAnimation();
-                          _selectedIndex = index;
-                        });
-                      },
-                    ),
-                  ),
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: materialStandardPadding),
-                      child: StrokeDiagramControls(controller),
-                    ),
-                  ),
-                ],
-              );
-            },
+          return Column(
+            children: <Widget>[
+              Expanded(
+                child: PageView(
+                  physics: controller != null && controller.isQuizzing
+                      ? NeverScrollableScrollPhysics()
+                      : ScrollPhysics(),
+                  controller: _pageController,
+                  scrollDirection: Axis.vertical,
+                  children: List.generate(
+                      _strokeOrderAnimationControllers.length, (index) {
+                    if (_strokeOrderAnimationControllers[index] != null) {
+                      return FittedBox(
+                        child: StrokeOrderAnimator(
+                          _strokeOrderAnimationControllers[index],
+                          key: UniqueKey(),
+                        ),
+                      );
+                    } else {
+                      return Center(
+                        child: Text(AppStrings.noStrokesFound +
+                            model
+                                .getActiveHeadword(prefs.chineseMode)
+                                .characters
+                                .toList()[_selectedIndex]),
+                      );
+                    }
+                  }),
+                  onPageChanged: (index) {
+                    setState(() {
+                      _strokeOrderAnimationControllers[_selectedIndex]
+                          ?.stopAnimation();
+                      _selectedIndex = index;
+                    });
+                  },
+                ),
+              ),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: materialStandardPadding),
+                  child: StrokeDiagramControls(controller),
+                ),
+              ),
+            ],
           );
         },
       ),
