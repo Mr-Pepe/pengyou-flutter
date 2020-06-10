@@ -12,7 +12,6 @@ import 'package:pengyou/values/theme.dart';
 import 'package:pengyou/viewModels/wordViewViewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:stroke_order_animator/strokeOrderAnimationController.dart';
-import 'package:characters/characters.dart';
 
 class WordView extends StatefulWidget {
   @override
@@ -23,9 +22,7 @@ class WordView extends StatefulWidget {
   final Entry entry;
 }
 
-class _WordViewState extends State<WordView> with TickerProviderStateMixin {
-  List<StrokeOrderAnimationController> _strokeOrderAnimationControllers;
-
+class _WordViewState extends State<WordView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -39,25 +36,6 @@ class _WordViewState extends State<WordView> with TickerProviderStateMixin {
       },
       child: Consumer2<WordViewViewModel, AppPreferences>(
         builder: (context, model, prefs, child) {
-          final strokeOrders = (prefs.chineseMode == ChineseMode.simplified ||
-                  prefs.chineseMode == ChineseMode.simplifiedTraditional)
-              ? model.simplifiedStrokeOrders
-              : model.traditionalStrokeOrders;
-
-          _strokeOrderAnimationControllers =
-              List.generate(strokeOrders.length, (index) {
-            if (strokeOrders[index].id == -1) {
-              return null;
-            } else {
-              return StrokeOrderAnimationController(
-                  strokeOrders[index].json, this);
-            }
-          });
-
-          final currentController = _strokeOrderAnimationControllers.length > 0
-              ? _strokeOrderAnimationControllers[model.selectedStrokeOrder]
-              : null;
-
           final headword = formatHeadword(
               model.entry, prefs.chineseMode, prefs.getToneColors(),
               mainFontSize: wordViewHeadwordFontSize,
@@ -136,13 +114,12 @@ class _WordViewState extends State<WordView> with TickerProviderStateMixin {
                 ),
                 Expanded(
                   child: TabBarView(
-                    physics: currentController != null &&
-                            currentController.isQuizzing
+                    physics: model.swipingBlocked
                         ? NeverScrollableScrollPhysics()
                         : ScrollPhysics(),
                     children: <Widget>[
                       DefinitionsView(model.entry.definitions),
-                      StrokeOrderView(_strokeOrderAnimationControllers),
+                      StrokeOrderView(),
                       Icon(Icons.update),
                     ],
                   ),

@@ -23,6 +23,9 @@ class WordViewViewModel extends ChangeNotifier {
   int _selectedStrokeOrder = 0;
   int get selectedStrokeOrder => _selectedStrokeOrder;
 
+  bool _swipingBlocked = false;
+  bool get swipingBlocked => _swipingBlocked;
+
   void init() async {
     _simplifiedStrokeOrders =
         await _strokeOrderRepository.getStrokeOrders(entry.simplified);
@@ -42,5 +45,10 @@ class WordViewViewModel extends ChangeNotifier {
             chineseMode == ChineseMode.simplifiedTraditional)
         ? entry.simplified
         : entry.traditional;
+  }
+
+  void setSwipingBlocked(bool value) {
+    _swipingBlocked = value;
+    notifyListeners();
   }
 }

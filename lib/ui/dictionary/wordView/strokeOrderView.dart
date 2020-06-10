@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pengyou/drawables/custom_icons_icons.dart';
 import 'package:pengyou/utils/appPreferences.dart';
+import 'package:pengyou/utils/enumsAndConstants.dart';
 import 'package:pengyou/values/dimensions.dart';
 import 'package:pengyou/values/strings.dart';
 import 'package:pengyou/values/theme.dart';
@@ -11,79 +12,110 @@ import 'package:stroke_order_animator/strokeOrderAnimationController.dart';
 import 'package:stroke_order_animator/strokeOrderAnimator.dart';
 import 'package:characters/characters.dart';
 
-class StrokeOrderView extends StatelessWidget {
-  final List<StrokeOrderAnimationController> _animationControllers;
-
-  const StrokeOrderView(this._animationControllers);
-
+class StrokeOrderView extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    final model = Provider.of<WordViewViewModel>(context);
-    final controller = _animationControllers[model.selectedStrokeOrder];
-
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: StrokeOrderPageView(_animationControllers),
-        ),
-        Center(
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: materialStandardPadding),
-            child: ChangeNotifierProvider<StrokeOrderAnimationController>.value(
-              value: controller,
-              child: Consumer<StrokeOrderAnimationController>(
-                builder: (context, controller, child) {
-                  return StrokeDiagramControls(controller);
-                },
-              ),
-            ),
-          ),
-        )
-      ],
-    );
-  }
+  _StrokeOrderViewState createState() => _StrokeOrderViewState();
 }
 
-class StrokeOrderPageView extends StatelessWidget {
-  const StrokeOrderPageView(
-    this._controllers, {
-    Key key,
-  }) : super(key: key);
+class _StrokeOrderViewState extends State<StrokeOrderView>
+    with TickerProviderStateMixin {
+  List<StrokeOrderAnimationController> _strokeOrderAnimationControllers;
+  PageController _pageController;
+  int _selectedIndex = 0;
 
-  final List<StrokeOrderAnimationController> _controllers;
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+    _strokeOrderAnimationControllers = [];
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _strokeOrderAnimationControllers) {
+      controller.dispose();
+    }
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<WordViewViewModel>(context);
     final prefs = Provider.of<AppPreferences>(context);
+    final model = Provider.of<WordViewViewModel>(context);
 
-    final controller = _controllers[model.selectedStrokeOrder];
+    final strokeOrders = (prefs.chineseMode == ChineseMode.simplified ||
+            prefs.chineseMode == ChineseMode.simplifiedTraditional)
+        ? model.simplifiedStrokeOrders
+        : model.traditionalStrokeOrders;
 
-    return PageView.builder(
-      physics: controller != null && controller.isQuizzing
-          ? NeverScrollableScrollPhysics()
-          : ScrollPhysics(),
-      scrollDirection: Axis.vertical,
-      itemCount: _controllers.length,
-      itemBuilder: (context, index) {
-        if (controller != null) {
-          return FittedBox(
-            child: StrokeOrderAnimator(controller),
-          );
+    if (strokeOrders.isNotEmpty && _strokeOrderAnimationControllers.isEmpty) {
+      _strokeOrderAnimationControllers =
+          List.generate(strokeOrders.length, (index) {
+        if (strokeOrders[index].id == -1) {
+          return null;
         } else {
-          return Center(
-            child: Text(AppStrings.noStrokesFound +
-                model
-                    .getActiveHeadword(prefs.chineseMode)
-                    .characters
-                    .toList()[model.selectedStrokeOrder]),
-          );
+          return StrokeOrderAnimationController(strokeOrders[index].json, this);
         }
-      },
-      onPageChanged: (index) {
-        model.setSelectedStrokeOrder(index);
-      },
+      });
+    }
+
+    return ChangeNotifierProvider<StrokeOrderAnimationController>.value(
+      value: _strokeOrderAnimationControllers[_selectedIndex],
+      child: Consumer<StrokeOrderAnimationController>(
+        builder: (context, controller, child) {
+          return AnimatedBuilder(
+            animation: controller.strokeAnimationController,
+            builder: (context, child) {
+              return Column(
+                children: <Widget>[
+                  Expanded(
+                    child: PageView(
+                      physics: controller != null && controller.isQuizzing
+                          ? NeverScrollableScrollPhysics()
+                          : ScrollPhysics(),
+                      controller: _pageController,
+                      scrollDirection: Axis.vertical,
+                      children: List.generate(
+                          _strokeOrderAnimationControllers.length, (index) {
+                        if (controller != null) {
+                          return FittedBox(
+                            child: StrokeOrderAnimator(
+                              _strokeOrderAnimationControllers[index],
+                              key: UniqueKey(),
+                            ),
+                          );
+                        } else {
+                          return Center(
+                            child: Text(AppStrings.noStrokesFound +
+                                model
+                                    .getActiveHeadword(prefs.chineseMode)
+                                    .characters
+                                    .toList()[_selectedIndex]),
+                          );
+                        }
+                      }),
+                      onPageChanged: (index) {
+                        setState(() {
+                          _strokeOrderAnimationControllers[_selectedIndex].stopAnimation();
+                          _selectedIndex = index;
+                        });
+                      },
+                    ),
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: materialStandardPadding),
+                      child: StrokeDiagramControls(controller),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
