@@ -22,6 +22,7 @@ class _StrokeOrderViewState extends State<StrokeOrderView>
   List<StrokeOrderAnimationController> _strokeOrderAnimationControllers;
   PageController _pageController;
   int _selectedIndex = 0;
+  WordViewViewModel model;
 
   @override
   void initState() {
@@ -42,7 +43,7 @@ class _StrokeOrderViewState extends State<StrokeOrderView>
   @override
   Widget build(BuildContext context) {
     final prefs = Provider.of<AppPreferences>(context);
-    final model = Provider.of<WordViewViewModel>(context);
+    model = Provider.of<WordViewViewModel>(context);
 
     final strokeOrders = (prefs.chineseMode == ChineseMode.simplified ||
             prefs.chineseMode == ChineseMode.simplifiedTraditional)
@@ -64,6 +65,10 @@ class _StrokeOrderViewState extends State<StrokeOrderView>
       value: _strokeOrderAnimationControllers[_selectedIndex],
       child: Consumer<StrokeOrderAnimationController>(
         builder: (context, controller, child) {
+          if (controller != null) {
+            controller.addOnQuizCompleteCallback(activateSwiping);
+          }
+
           return Column(
             children: <Widget>[
               Expanded(
@@ -113,6 +118,10 @@ class _StrokeOrderViewState extends State<StrokeOrderView>
         },
       ),
     );
+  }
+
+  activateSwiping(QuizSummary summary) {
+    model?.setSwipingBlocked(false);
   }
 }
 
