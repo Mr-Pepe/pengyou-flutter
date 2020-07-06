@@ -4,14 +4,12 @@ import 'package:pengyou/models/entry.dart';
 import 'package:pengyou/ui/dictionary/wordView/definitionsView.dart';
 import 'package:pengyou/ui/dictionary/wordView/strokeOrderView.dart';
 import 'package:pengyou/utils/appPreferences.dart';
-import 'package:pengyou/utils/enumsAndConstants.dart';
 import 'package:pengyou/utils/formatting.dart';
 import 'package:pengyou/values/dimensions.dart';
 import 'package:pengyou/values/strings.dart';
 import 'package:pengyou/values/theme.dart';
 import 'package:pengyou/viewModels/wordViewViewModel.dart';
 import 'package:provider/provider.dart';
-import 'package:stroke_order_animator/strokeOrderAnimationController.dart';
 
 class WordView extends StatefulWidget {
   @override
