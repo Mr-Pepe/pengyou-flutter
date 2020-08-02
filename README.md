@@ -1,3 +1,1 @@
-# pengyou
-
-An open-soruce app to help you learn Chinese.
+A flutter port of the [original Android app](https://github.com/Mr-Pepe/pengyou).
